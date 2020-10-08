@@ -35,7 +35,7 @@ public class AllPatientController {
     @FXML
     private TableColumn<Patient, String> colRoom;
     @FXML
-    private TableColumn<Patient, String> colAssets;
+    private TableColumn<Patient, String> colIsLocked;
 
     @FXML
     Button btnDelete;
@@ -52,7 +52,7 @@ public class AllPatientController {
     @FXML
     TextField txtRoom;
     @FXML
-    private TextField txtAssets;
+    CheckBox chBoxIsLocked;
 
     private ObservableList<Patient> tableviewContent = FXCollections.observableArrayList();
     private PatientDAO dao;
@@ -82,8 +82,8 @@ public class AllPatientController {
         this.colRoom.setCellValueFactory(new PropertyValueFactory<Patient, String>("roomnumber"));
         this.colRoom.setCellFactory(TextFieldTableCell.forTableColumn());
 
-        this.colAssets.setCellValueFactory(new PropertyValueFactory<Patient, String>("assets"));
-        this.colAssets.setCellFactory(TextFieldTableCell.forTableColumn());
+        this.colIsLocked.setCellValueFactory(new PropertyValueFactory<Patient, String>("islocked"));
+        this.colIsLocked.setCellFactory(TextFieldTableCell.forTableColumn());
 
         //Anzeigen der Daten
         this.tableView.setItems(this.tableviewContent);
@@ -196,8 +196,9 @@ public class AllPatientController {
         LocalDate date = DateConverter.convertStringToLocalDate(birthday);
         String carelevel = this.txtCarelevel.getText();
         String room = this.txtRoom.getText();
+        boolean isLocked = this.chBoxIsLocked.isSelected();
         try {
-            Patient p = new Patient(firstname, surname, date, carelevel, room);
+            Patient p = new Patient(firstname, surname, date, carelevel, room, isLocked);
             dao.create(p);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -215,6 +216,5 @@ public class AllPatientController {
         this.txtBirthday.clear();
         this.txtCarelevel.clear();
         this.txtRoom.clear();
-        this.txtAssets.clear();
     }
 }

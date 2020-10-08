@@ -54,7 +54,7 @@ public class PatientDAO extends DAOimp<Patient> {
         LocalDate date = DateConverter.convertStringToLocalDate(result.getString(4));
         p = new Patient(result.getInt(1), result.getString(2),
                 result.getString(3), date, result.getString(5),
-                result.getString(6));
+                result.getString(6), result.getBoolean(7));
         return p;
     }
 
@@ -80,7 +80,7 @@ public class PatientDAO extends DAOimp<Patient> {
             LocalDate date = DateConverter.convertStringToLocalDate(result.getString(4));
             p = new Patient(result.getInt(1), result.getString(2),
                     result.getString(3), date,
-                    result.getString(5), result.getString(6));
+                    result.getString(5), result.getString(6), result.getBoolean(7));
             list.add(p);
         }
         return list;
