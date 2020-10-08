@@ -32,7 +32,7 @@ public class ConnectionBuilder {
     public static void closeConnection() {
         try {
             conn.close();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
