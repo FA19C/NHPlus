@@ -140,16 +140,6 @@ public class AllPatientController {
     }
 
     /**
-     * handles new asset value
-     * @param event event including the value that a user entered into the cell
-     */
-    @FXML
-    public void handleOnEditAssets(TableColumn.CellEditEvent<Patient, String> event){
-        event.getRowValue().setAssets(event.getNewValue());
-        doUpdate(event);
-    }
-
-    /**
      * updates a patient by calling the update-Method in the {@link PatientDAO}
      * @param t row to be updated by the user (includes the patient)
      */
@@ -206,9 +196,8 @@ public class AllPatientController {
         LocalDate date = DateConverter.convertStringToLocalDate(birthday);
         String carelevel = this.txtCarelevel.getText();
         String room = this.txtRoom.getText();
-        String assets = this.txtAssets.getText();
         try {
-            Patient p = new Patient(firstname, surname, date, carelevel, room, assets);
+            Patient p = new Patient(firstname, surname, date, carelevel, room);
             dao.create(p);
         } catch (SQLException e) {
             e.printStackTrace();
