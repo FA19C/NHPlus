@@ -12,7 +12,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.Optional;
 
 public class Main extends Application {
@@ -27,6 +27,9 @@ public class Main extends Application {
 
     public void mainWindow() {
         try {
+            if(!copieDBFiles())
+                return;
+
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("/MainWindowView.fxml"));
             BorderPane pane = loader.load();
 
@@ -48,6 +51,35 @@ public class Main extends Application {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        if(!copieDBFiles())
+            return;
+    }
+
+    private boolean copieDBFiles(){
+        try{
+            File databaseFile = new File("./db_backup/");
+            String copieToPath = "./db/";
+            for (File file : databaseFile.listFiles()) {
+                if(file.isFile()) {
+                    File copieToFile = new File(copieToPath + file.getName());
+
+                    BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
+                    BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(copieToFile));
+
+                    byte[] buffer = new byte[4096];
+                    int amount = 0;
+                    while((amount = bis.read(buffer)) > 0) {
+                        bos.write(buffer, 0, amount);
+                    }
+                    bis.close();
+                    bos.flush();
+                    bos.close();
+                }
+            }
+        }catch(Exception e){
+            return false;
+        }
+        return true;
     }
 
     public static void main(String[] args) {
