@@ -17,6 +17,19 @@ public class Patient extends Person {
     private List<Treatment> allTreatments = new ArrayList<Treatment>();
     private boolean isLocked;
 
+
+    /**
+     * constructs a patient from the given params.
+     * @param firstName
+     * @param surname
+     * @param dateOfBirth
+     * @param careLevel
+     * @param roomnumber
+     */
+    public Patient(String firstName, String surname, LocalDate dateOfBirth, String careLevel, String roomnumber) {
+        this(firstName, surname, dateOfBirth, careLevel, roomnumber, false);
+    }
+
     /**
      * constructs a patient from the given params.
      * @param firstName
@@ -121,6 +134,8 @@ public class Patient extends Person {
         return false;
     }
 
+    public boolean isLocked(){ return this.isLocked; }
+
     public void lockPatient(){
         this.isLocked = true;
     }
@@ -129,17 +144,28 @@ public class Patient extends Person {
         this.isLocked = false;
     }
 
+    public void setLockState(boolean lockState){
+        this.isLocked = lockState;
+    }
     /**
      *
      * @return string-representation of the patient
      */
     public String toString() {
+        if (this.isLocked){
+            return "Patient" + "\nMNID: " + this.pid +
+                    "\nFirstname: " + this.getFirstName() +
+                    "\nSurname: " + this.getSurname() +
+                    "\nIsLocked: " + this.isLocked +
+                    "\n";
+        }
         return "Patient" + "\nMNID: " + this.pid +
                 "\nFirstname: " + this.getFirstName() +
                 "\nSurname: " + this.getSurname() +
                 "\nBirthday: " + this.dateOfBirth +
                 "\nCarelevel: " + this.careLevel +
                 "\nRoomnumber: " + this.roomnumber +
+                "\nIsLocked: " + this.isLocked +
                 "\n";
     }
 }

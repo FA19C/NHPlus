@@ -2,6 +2,7 @@ package controller;
 
 import datastorage.PatientDAO;
 import datastorage.TreatmentDAO;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -20,6 +21,9 @@ import java.util.List;
  * The <code>AllPatientController</code> contains the entire logic of the patient view. It determines which data is displayed and how to react to events.
  */
 public class AllPatientController {
+
+    private Patient currentSelection;
+
     @FXML
     private TableView<Patient> tableView;
     @FXML
@@ -52,7 +56,9 @@ public class AllPatientController {
     @FXML
     TextField txtRoom;
     @FXML
-    CheckBox chBoxIsLocked;
+    Button btnLock;
+    @FXML
+    Button btnUnlock;
 
     private ObservableList<Patient> tableviewContent = FXCollections.observableArrayList();
     private PatientDAO dao;
@@ -87,6 +93,8 @@ public class AllPatientController {
 
         //Anzeigen der Daten
         this.tableView.setItems(this.tableviewContent);
+        this.tableView.getSelectionModel().selectedItemProperty().addListener(this::onSelectionChanged);
+
     }
 
     /**
@@ -161,6 +169,11 @@ public class AllPatientController {
         try {
             allPatients = dao.readAll();
             for (Patient p : allPatients) {
+                if (p.isLocked()){
+                    p.setCareLevel("");
+                    p.setDateOfBirth("0001-01-01");
+                    p.setRoomnumber("");
+                }
                 this.tableviewContent.add(p);
             }
         } catch (SQLException e) {
@@ -196,15 +209,35 @@ public class AllPatientController {
         LocalDate date = DateConverter.convertStringToLocalDate(birthday);
         String carelevel = this.txtCarelevel.getText();
         String room = this.txtRoom.getText();
-        boolean isLocked = this.chBoxIsLocked.isSelected();
         try {
-            Patient p = new Patient(firstname, surname, date, carelevel, room, isLocked);
+            Patient p = new Patient(firstname, surname, date, carelevel, room);
             dao.create(p);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         readAllAndShowInTableView();
         clearTextfields();
+    }
+    @FXML
+    private void handleBtnUnlock(){
+        Patient selectedItem = this.tableView.getSelectionModel().getSelectedItem();
+        setLockState(selectedItem, false);
+    }
+    @FXML
+    private void handleBtnLock(){
+        Patient selectedItem = this.tableView.getSelectionModel().getSelectedItem();
+        setLockState(selectedItem, true);
+    }
+
+    private void setLockState(Patient p, boolean lockState){
+        p.setLockState(lockState);
+        try {
+            dao.update(p);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        this.onSelectionChanged(null, null, p);
+        this.readAllAndShowInTableView();
     }
 
     /**
@@ -216,5 +249,19 @@ public class AllPatientController {
         this.txtBirthday.clear();
         this.txtCarelevel.clear();
         this.txtRoom.clear();
+    }
+
+    private void onSelectionChanged(ObservableValue<? extends Patient> obs, Patient oldValue, Patient newValue){
+        if (newValue != null){
+            currentSelection = newValue;
+            System.out.println(!currentSelection.isLocked());
+            System.out.println(currentSelection.isLocked());
+            this.btnLock.setDisable(currentSelection.isLocked());
+            this.btnUnlock.setDisable(!currentSelection.isLocked());
+        }
+        else {
+            this.btnLock.setDisable(true);
+            this.btnUnlock.setDisable(true);
+        }
     }
 }
