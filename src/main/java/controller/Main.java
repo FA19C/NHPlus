@@ -5,10 +5,8 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -21,7 +19,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        this.primaryStage = primaryStage;
+
+        MainStage.primaryStage = primaryStage;
+        // this.primaryStage = primaryStage;
         mainWindow();
     }
 
@@ -30,16 +30,17 @@ public class Main extends Application {
             if(!copieDBFiles())
                 return;
 
-            FXMLLoader loader = new FXMLLoader(Main.class.getResource("/MainWindowView.fxml"));
-            BorderPane pane = loader.load();
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("/dlgLoginView.fxml"));
+            Parent pane = loader.load();
 
             Scene scene = new Scene(pane);
-            this.primaryStage.setTitle("NHPlus");
-            this.primaryStage.setScene(scene);
-            this.primaryStage.setResizable(false);
-            this.primaryStage.show();
 
-            this.primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            MainStage.primaryStage.setTitle("Login");
+            MainStage.primaryStage.setScene(scene);
+            MainStage.primaryStage.setResizable(false);
+            MainStage.primaryStage.show();
+
+            MainStage.primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                 @Override
                 public void handle(WindowEvent e) {
                     ConnectionBuilder.closeConnection();
