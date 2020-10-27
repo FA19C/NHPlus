@@ -15,6 +15,7 @@ public class Patient extends Person {
     private String careLevel;
     private String roomnumber;
     private List<Treatment> allTreatments = new ArrayList<Treatment>();
+    private boolean locked;
 
     /**
      * constructs a patient from the given params.
@@ -24,11 +25,12 @@ public class Patient extends Person {
      * @param careLevel
      * @param roomnumber
      */
-    public Patient(String firstName, String surname, LocalDate dateOfBirth, String careLevel, String roomnumber) {
+    public Patient(String firstName, String surname, LocalDate dateOfBirth, String careLevel, String roomnumber, boolean locked) {
         super(firstName, surname);
         this.dateOfBirth = dateOfBirth;
         this.careLevel = careLevel;
         this.roomnumber = roomnumber;
+        this.locked = locked;
     }
 
     /**
@@ -40,12 +42,13 @@ public class Patient extends Person {
      * @param careLevel
      * @param roomnumber
      */
-    public Patient(long pid, String firstName, String surname, LocalDate dateOfBirth, String careLevel, String roomnumber) {
+    public Patient(long pid, String firstName, String surname, LocalDate dateOfBirth, String careLevel, String roomnumber, boolean locked) {
         super(firstName, surname);
         this.pid = pid;
         this.dateOfBirth = dateOfBirth;
         this.careLevel = careLevel;
         this.roomnumber = roomnumber;
+        this.locked = locked;
     }
 
     /**
@@ -104,6 +107,18 @@ public class Patient extends Person {
     public void setRoomnumber(String roomnumber) {
         this.roomnumber = roomnumber;
     }
+
+    /**
+     *
+     * @return locked
+     */
+    public boolean getLocked() {return locked; }
+
+    /**
+     *
+     * @param locked
+     */
+    public void setLocked(boolean locked) {this.locked = locked;  }
 
     /**
      * adds a treatment to the treatment-list, if it does not already contain it.
