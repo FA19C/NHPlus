@@ -14,6 +14,7 @@ import datastorage.DAOFactory;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
+import javafx.util.Callback;
 
 
 /**
@@ -60,25 +61,43 @@ public class AllPatientController {
      */
     public void initialize() {
         readAllAndShowInTableView();
+        //CellFactory, die den Lockedstatus beachtet um Zellen uneditierbar zu machen
+        Callback<TableColumn<Patient, String>, TableCell<Patient, String>> cellFactoryNoticingLockedState = col -> {
+            TableCell<Patient, String> cell = TextFieldTableCell.<Patient>forTableColumn().call(col);
+            cell.itemProperty().addListener((obs, oldValue, newValue) -> {
+                TableRow row = cell.getTableRow();
+                if (row == null) {
+                    cell.setEditable(false);
+                } else {
+                    Patient item = (Patient) cell.getTableRow().getItem();
+                    if (item == null) {
+                        cell.setEditable(false);
+                    } else {
+                        cell.setEditable(!item.getLocked());
+                    }
+                }
+            });
+            return cell ;
+        };
 
         this.colID.setCellValueFactory(new PropertyValueFactory<Patient, Integer>("pid"));
 
         //CellValuefactory zum Anzeigen der Daten in der TableView
         this.colFirstName.setCellValueFactory(new PropertyValueFactory<Patient, String>("firstName"));
-        //CellFactory zum Schreiben innerhalb der Tabelle
-        this.colFirstName.setCellFactory(TextFieldTableCell.forTableColumn());
+        //CellFactory zum Schreiben innerhalb der Tabelle die nun auch Locked beachtet
+        this.colFirstName.setCellFactory(cellFactoryNoticingLockedState);
 
         this.colSurname.setCellValueFactory(new PropertyValueFactory<Patient, String>("surname"));
-        this.colSurname.setCellFactory(TextFieldTableCell.forTableColumn());
+        this.colSurname.setCellFactory(cellFactoryNoticingLockedState);
 
         this.colDateOfBirth.setCellValueFactory(new PropertyValueFactory<Patient, String>("dateOfBirth"));
-        this.colDateOfBirth.setCellFactory(TextFieldTableCell.forTableColumn());
+        this.colDateOfBirth.setCellFactory(cellFactoryNoticingLockedState);
 
         this.colCareLevel.setCellValueFactory(new PropertyValueFactory<Patient, String>("careLevel"));
-        this.colCareLevel.setCellFactory(TextFieldTableCell.forTableColumn());
+        this.colCareLevel.setCellFactory(cellFactoryNoticingLockedState);
 
         this.colRoom.setCellValueFactory(new PropertyValueFactory<Patient, String>("roomnumber"));
-        this.colRoom.setCellFactory(TextFieldTableCell.forTableColumn());
+        this.colRoom.setCellFactory(cellFactoryNoticingLockedState);
 
         this.colLocked.setCellValueFactory(new PropertyValueFactory<Patient, Boolean>("locked"));
         //Anzeigen der Daten
@@ -130,9 +149,10 @@ public class AllPatientController {
      * @param event event including the value that a user entered into the cell
      */
     @FXML
-    public void handleOnEditRoomnumber(TableColumn.CellEditEvent<Patient, String> event){
-        event.getRowValue().setRoomnumber(event.getNewValue());
-        doUpdate(event);
+    public void handleOnEditRoomnumber(TableColumn.CellEditEvent<Patient, String> event)
+    {
+            event.getRowValue().setRoomnumber(event.getNewValue());
+            doUpdate(event);
     }
 
     /**
@@ -161,8 +181,10 @@ public class AllPatientController {
                 {
                     p.setCareLevel("Gesperrt");
                     p.setDateOfBirth("0000-01-01");
+                    p.setRoomnumber("Gesperrt");
                 }
                 this.tableviewContent.add(p);
+                this.tableView.refresh();
             }
 
         } catch (SQLException e) {
