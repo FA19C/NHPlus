@@ -32,4 +32,9 @@ public class MainWindowController {
         }
         AllTreatmentController controller = loader.getController();
     }
+
+    @FXML
+    private void btSperrenAction(ActionEvent event) {
+        System.out.println("btSperrenAction");
+    }
 }

@@ -1,9 +1,9 @@
 package controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.input.MouseEvent;
 import javafx.fxml.FXML;
 
 import java.io.IOException;
@@ -11,12 +11,12 @@ import java.io.IOException;
 public class dlgLoginController {
 
     @FXML
-    void cancel_Click(MouseEvent event) {
+    void cancel_Action(ActionEvent event) {
         System.out.println("cancel_Click");
     }
 
     @FXML
-    void ok_Click(MouseEvent event) {
+    void ok_Action(ActionEvent event) {
         System.out.println("ok_Click");
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("/MainWindowView.fxml"));
         Parent pane = null;
