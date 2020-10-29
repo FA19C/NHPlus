@@ -1,5 +1,7 @@
 package controller;
 
+import com.itextpdf.html2pdf.HtmlConverter;
+import com.itextpdf.io.source.OutputStream;
 import datastorage.PatientDAO;
 import datastorage.TreatmentDAO;
 import javafx.beans.value.ObservableValue;
@@ -7,11 +9,25 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import lib.OSDetector;
 import model.Patient;
 import utils.DateConverter;
 import datastorage.DAOFactory;
+
+import java.awt.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
@@ -58,7 +74,7 @@ public class AllPatientController {
     @FXML
     Button btnLock;
     @FXML
-    Button btnUnlock;
+    Button btnPDFExport;
 
     private ObservableList<Patient> tableviewContent = FXCollections.observableArrayList();
     private PatientDAO dao;
@@ -215,10 +231,55 @@ public class AllPatientController {
         clearTextfields();
     }
     @FXML
-    private void handleBtnUnlock(){
+    private void handleBtnPDFExport(){
         Patient selectedItem = this.tableView.getSelectionModel().getSelectedItem();
-        setLockState(selectedItem, false);
+        try {
+            convertToPDFAndOpen(selectedItem);
+        }
+        catch (Exception e){}
     }
+
+    private void convertToPDFAndOpen(Patient selectedItem)  throws URISyntaxException, IOException {
+        URL pathURl = Thread.currentThread().getContextClassLoader().getResource("Templates/PDFTemplate.html");
+        Path path = Paths.get(pathURl.toURI());
+        String html = Files.readString(path, StandardCharsets.UTF_8);
+        html = String.format(html,
+                "Patient: "+ selectedItem.getPid(),
+                selectedItem.getPid(),
+                selectedItem.getFirstName()+ " " + selectedItem.getSurname(),
+                selectedItem.getDateOfBirth(),
+                selectedItem.getCareLevel(),
+                selectedItem.getRoomnumber());
+        File pdf = new File("P"+selectedItem.getPid()+".pdf");
+        pdf.createNewFile();
+        HtmlConverter.convertToPdf(html, new FileOutputStream(pdf));
+        openFile(pdf);
+    }
+
+    private void openFile(File file) throws IOException {
+        String path = file.getAbsolutePath();
+        if (OSDetector.isWindows())
+        {
+            Runtime.getRuntime().exec(new String[]
+                    {"rundll32", "url.dll,FileProtocolHandler",
+                            path});
+
+        } else if (OSDetector.isLinux() || OSDetector.isMac())
+        {
+            Runtime.getRuntime().exec(new String[]{"/usr/bin/opener",
+                    path});
+
+        } else
+        {
+            // Unknown OS, try with desktop
+            if (Desktop.isDesktopSupported())
+            {
+                Desktop.getDesktop().open(file);
+
+            }
+        }
+    }
+
     @FXML
     private void handleBtnLock(){
         Patient selectedItem = this.tableView.getSelectionModel().getSelectedItem();
@@ -253,11 +314,11 @@ public class AllPatientController {
             System.out.println(!currentSelection.isLocked());
             System.out.println(currentSelection.isLocked());
             this.btnLock.setDisable(currentSelection.isLocked());
-            this.btnUnlock.setDisable(!currentSelection.isLocked());
+            this.btnPDFExport.setDisable(false);
         }
         else {
             this.btnLock.setDisable(true);
-            this.btnUnlock.setDisable(true);
+            this.btnLock.setDisable(true);
         }
     }
 }

@@ -52,8 +52,8 @@
                   <TextField fx:id="txtRoom" prefHeight="26.0" prefWidth="200.0" promptText="Raum" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <Button fx:id="btnAdd" mnemonicParsing="false" onAction="#handleAdd" prefWidth="100.0" text="Hinzufügen" GridPane.columnIndex="3" />
                   <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#handleDeleteRow" prefWidth="100.0" text="Löschen" GridPane.columnIndex="4" />
-                  <Button id="btnLock" fx:id="btnLock" disable="true" alignment="CENTER" mnemonicParsing="false" prefWidth="100.0" text="Sperren" GridPane.columnIndex="3" GridPane.rowIndex="1" onAction="#handleBtnLock"/>
-                  <Button id="btnUnlock" fx:id="btnUnlock" disable="true" mnemonicParsing="false" prefWidth="100.0" text="Entsperren" GridPane.columnIndex="4" GridPane.rowIndex="1" onAction="#handleBtnUnlock"/>
+                  <Button id="btnLock" fx:id="btnLock" alignment="CENTER" disable="true" mnemonicParsing="false" onAction="#handleBtnLock" prefWidth="100.0" text="Sperren" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <Button id="btnPDFExport" fx:id="btnPDFExport" disable="true" mnemonicParsing="false" onAction="#handleBtnPDFExport" prefWidth="100.0" text="Als PDF Exportieren" GridPane.columnIndex="4" GridPane.rowIndex="1" />
                </children>
             </GridPane>
          </children></FlowPane>
