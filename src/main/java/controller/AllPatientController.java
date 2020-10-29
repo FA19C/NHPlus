@@ -169,12 +169,9 @@ public class AllPatientController {
         try {
             allPatients = dao.readAll();
             for (Patient p : allPatients) {
-                if (p.isLocked()){
-                    p.setCareLevel("");
-                    p.setDateOfBirth("0001-01-01");
-                    p.setRoomnumber("");
+                if (!p.isLocked()){
+                    this.tableviewContent.add(p);
                 }
-                this.tableviewContent.add(p);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -186,12 +183,11 @@ public class AllPatientController {
      */
     @FXML
     public void handleDeleteRow() {
-        TreatmentDAO tDao = DAOFactory.getDAOFactory().createTreatmentDAO();
         Patient selectedItem = this.tableView.getSelectionModel().getSelectedItem();
         this.tableView.getItems().remove(selectedItem);
         try {
-            tDao.deleteByPid((int) selectedItem.getPid());
-            dao.deleteById((int) selectedItem.getPid());
+            selectedItem.lockPatient();
+            dao.update(selectedItem);
         } catch (SQLException e) {
             e.printStackTrace();
         }
