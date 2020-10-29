@@ -23,7 +23,7 @@
     <RowConstraints maxHeight="36.0" minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <TextField id="tbUserName" GridPane.columnIndex="2">
+      <TextField fx:id="tbUserName" GridPane.columnIndex="2">
          <GridPane.margin>
             <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
          </GridPane.margin>
@@ -58,7 +58,7 @@
             <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
          </padding>
       </FlowPane>
-      <PasswordField GridPane.columnIndex="2" GridPane.rowIndex="1" />
+      <PasswordField fx:id="tbPassword" GridPane.columnIndex="2" GridPane.rowIndex="1" />
    </children>
    <padding>
       <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />

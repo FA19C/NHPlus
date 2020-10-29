@@ -3,6 +3,8 @@ package controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import java.io.IOException;
 
@@ -36,5 +38,18 @@ public class MainWindowController {
     @FXML
     private void btSperrenAction(ActionEvent event) {
         System.out.println("btSperrenAction");
+
+        try{
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("/dlgLoginView.fxml"));
+            Parent pane = loader.load();
+
+            Scene scene = new Scene(pane);
+
+            MainStage.primaryStage.setTitle("Login");
+            MainStage.primaryStage.setScene(scene);
+            MainStage.primaryStage.setResizable(false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
