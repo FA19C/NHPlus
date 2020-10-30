@@ -1,9 +1,11 @@
 package model;
 
-public class User  {
+public class User {
     private int ID;
     private String LogginName;
     private String LogginPasswort;
+
+    private Person UserPerson;
 
     public void setID(int ID) {
         this.ID = ID;
@@ -27,6 +29,14 @@ public class User  {
 
     public String getLogginPasswort() {
         return LogginPasswort;
+    }
+
+    public void setUserPerson(Person userPerson) {
+        UserPerson = userPerson;
+    }
+
+    public Person getUserPerson() {
+        return UserPerson;
     }
 }
 

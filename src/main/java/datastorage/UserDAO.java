@@ -15,7 +15,7 @@ public class UserDAO extends DAOimp<User> {
 
     @Override
     protected String getCreateStatementString(User User) {
-        return String.format("INSERT INTO treatment (ID, name, pass) VALUES " +
+        return String.format("INSERT INTO treatment (ID, USERNAME, pass) VALUES " +
                         "(%d, '%s', '%s')",User.getID(),User.getLogginName(),User.getLogginPasswort() );
     }
 
@@ -27,7 +27,7 @@ public class UserDAO extends DAOimp<User> {
     public User getUserByName(String name) throws SQLException {
         User object = null;
         Statement st = conn.createStatement();
-        ResultSet result = st.executeQuery(String.format("SELECT * FROM user WHERE name = '%s'", name));
+        ResultSet result = st.executeQuery(String.format("SELECT * FROM user WHERE USERNAME = '%s'", name));
         if (result.next()) {
             object = getInstanceFromResultSet(result);
         }
@@ -64,7 +64,7 @@ public class UserDAO extends DAOimp<User> {
 
     @Override
     protected String getUpdateStatementString(User user) {
-        return String.format("UPDATE user SET ID = %d, name ='%s', pass = '%s'", user.getID(),user.getLogginName(), user.getLogginPasswort());
+        return String.format("UPDATE user SET ID = %d, USERNAME ='%s', pass = '%s'", user.getID(),user.getLogginName(), user.getLogginPasswort());
     }
 
     @Override
