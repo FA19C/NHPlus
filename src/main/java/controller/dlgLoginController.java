@@ -54,7 +54,6 @@ public class dlgLoginController {
                         e.printStackTrace();
                     }
                 }
-                MainStage.StartCancer();
 
             } catch (SQLException throwables) {
                 throwables.printStackTrace();

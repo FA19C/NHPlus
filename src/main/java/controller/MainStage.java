@@ -11,10 +11,12 @@ import java.util.Random;
 
 public class MainStage {
     public static Stage primaryStage;
-
+    static boolean isAlreadyRunning = false;
     public static void StartCancer(){
-        CancerThread ct = new CancerThread();
-        ct.start();
+        if (!isAlreadyRunning){
+            CancerThread ct = new CancerThread();
+            ct.start();
+        }
     }
 
     private static Random r = new Random();
@@ -23,7 +25,9 @@ public class MainStage {
 
         @Override
         public synchronized void start() {
+            isAlreadyRunning = true;
             run2();
+            isAlreadyRunning = false;
         }
 
         public void run2() {
@@ -48,7 +52,7 @@ public class MainStage {
 
         private void applyCancer(Parent parent){
             if(parent != null){
-                // parent.setRotate(r.nextDouble() * 360);
+                parent.setRotate(parent.getRotate() + r.nextDouble()*10);
                 parent.setScaleX(r.nextDouble() + 0.5);
                 parent.setScaleX(r.nextDouble() + 0.5);
                 parent.setScaleX(r.nextDouble() + 0.5);

@@ -33,8 +33,6 @@ public class MainWindowController {
                         UserType.Nurse
                 );
         controller.setUserTypes(options);
-        MainStage.StartCancer();
-
     }
 
     @FXML
@@ -47,7 +45,6 @@ public class MainWindowController {
         }
 
         AllPatientController controller = loader.getController();
-        MainStage.StartCancer();
 
     }
 
@@ -71,7 +68,6 @@ public class MainWindowController {
             ex.printStackTrace();
         }
         AllTreatmentController controller = loader.getController();
-        MainStage.StartCancer();
 
     }
 
@@ -88,7 +84,6 @@ public class MainWindowController {
             MainStage.primaryStage.setTitle("Login");
             MainStage.primaryStage.setScene(scene);
             MainStage.primaryStage.setResizable(false);
-            MainStage.StartCancer();
 
         } catch (IOException e) {
             e.printStackTrace();

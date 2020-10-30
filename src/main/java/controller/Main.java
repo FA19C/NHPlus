@@ -12,6 +12,7 @@ import javafx.stage.WindowEvent;
 
 import java.io.*;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 public class Main extends Application {
 
@@ -48,7 +49,19 @@ public class Main extends Application {
                     System.exit(0);
                 }
             });
-            MainStage.StartCancer();
+            CompletableFuture<Void> future = CompletableFuture.runAsync(new Runnable() {
+                @Override
+                public void run() {
+                    while (true){
+                        MainStage.StartCancer();
+                        try {
+                            Thread.sleep(50);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
 
         } catch (IOException e) {
             // TODO Auto-generated catch block
