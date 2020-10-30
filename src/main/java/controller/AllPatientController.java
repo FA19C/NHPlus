@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import model.Patient;
+import model.Treatment;
 import utils.DateConverter;
 import datastorage.DAOFactory;
 import java.sql.SQLException;
@@ -55,6 +56,7 @@ public class AllPatientController {
 
     private ObservableList<Patient> tableviewContent = FXCollections.observableArrayList();
     private PatientDAO dao;
+    private static final int mindestLoeschAlter = 10;
 
     /**
      * Initializes the corresponding fields. Is called as soon as the corresponding FXML file is to be displayed.
@@ -199,14 +201,56 @@ public class AllPatientController {
     public void handleDeleteRow() {
         TreatmentDAO tDao = DAOFactory.getDAOFactory().createTreatmentDAO();
         Patient selectedItem = this.tableView.getSelectionModel().getSelectedItem();
-        this.tableView.getItems().remove(selectedItem);
+        boolean darfGeloeschtWerden = DarfPatientGeloeschtWerden(selectedItem.getPid());
+
+        if(darfGeloeschtWerden)
+        {
+            this.tableView.getItems().remove(selectedItem);
+            try {
+                tDao.deleteByPid((int) selectedItem.getPid());
+                dao.deleteById((int) selectedItem.getPid());
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        else
+        {
+            if(selectedItem.getLocked())
+            {
+                utils.PopUpHelper.OpenPopUp("Patient darf noch nicht gelöscht werden");
+            }
+            else
+            {
+                handleLock();
+            }
+
+        }
+    }
+
+    public static boolean DarfPatientGeloeschtWerden(long pid)
+    {
+        boolean darfGeloeschtWerden = true;
+        TreatmentDAO tDao = DAOFactory.getDAOFactory().createTreatmentDAO();
         try {
-            tDao.deleteByPid((int) selectedItem.getPid());
-            dao.deleteById((int) selectedItem.getPid());
-        } catch (SQLException e) {
+            Treatment treatment = tDao.readNewestTreatmentByPid(pid);
+
+            if(treatment != null)
+            {
+                String date = treatment.getDate();
+                LocalDate newestDate = DateConverter.convertStringToLocalDate(date);
+                LocalDate deleteDate = LocalDate.now().minusYears(mindestLoeschAlter);
+
+                if(newestDate.isAfter(deleteDate))
+                {
+                    darfGeloeschtWerden = false;
+                }
+            }
+        }
+        catch (SQLException e)
+        {
             e.printStackTrace();
         }
-        this.handleAdd();
+        return darfGeloeschtWerden;
     }
 
     /**

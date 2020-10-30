@@ -165,8 +165,12 @@ public class AllTreatmentController {
     @FXML
     public void handleMouseClick(){
         int index = this.tableView.getSelectionModel().getSelectedIndex();
-        Treatment treatment = this.tableviewContent.get(index);
-        treatmentWindow(treatment);
+
+        if (index > -1) {
+            Treatment treatment = this.tableviewContent.get(index);
+            treatmentWindow(treatment);
+        }
+
     }
 
     public void newTreatmentWindow(Patient patient){

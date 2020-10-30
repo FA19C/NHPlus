@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="100.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.PopUpViewController">
+   <children>
+      <Label fx:id="lblText" alignment="TOP_CENTER" prefHeight="17.0" prefWidth="285.0" text="Label" textAlignment="CENTER" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" />
+      <Button fx:id="btnOk" layoutX="134.0" layoutY="61.0" mnemonicParsing="false" onAction="#onHandleOk" text="Ok" AnchorPane.leftAnchor="134.0" AnchorPane.rightAnchor="134.0" />
+   </children>
+</AnchorPane>
