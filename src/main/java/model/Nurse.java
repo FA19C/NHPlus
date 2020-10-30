@@ -1,7 +1,11 @@
 package model;
 
 public class Nurse extends Person {
-    public Nurse(String firstName, String surname) {
+
+    private String telephoneNumber;
+
+    public Nurse(String firstName, String surname, String telNumber) {
         super(firstName, surname);
+        this.telephoneNumber = telNumber;
     }
 }
