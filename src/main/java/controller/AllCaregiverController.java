@@ -1,24 +1,38 @@
 package controller;
 
+import datastorage.DAOFactory;
+import datastorage.NurseDAO;
+import datastorage.PatientDAO;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import model.Patient;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import model.Nurse;
+
+import java.sql.SQLException;
+import java.util.List;
 
 public class AllCaregiverController {
 
+    private Nurse currentSelection;
+
+
     @FXML
-    private TableView<Patient> tableView;
+    private TableView<Nurse> tableView;
     @FXML
-    private TableColumn<Patient, Integer> colID;
+    private TableColumn<Nurse, Integer> colID;
     @FXML
-    private TableColumn<Patient, String> colFirstName;
+    private TableColumn<Nurse, String> colFirstName;
     @FXML
-    private TableColumn<Patient, String> colSurname;
+    private TableColumn<Nurse, String> colSurname;
     @FXML
-    private TableColumn<Patient, String> colTelephone;
+    private TableColumn<Nurse, String> colTelephone;
     @FXML
     Button btnDelete;
     @FXML
@@ -28,5 +42,59 @@ public class AllCaregiverController {
     @FXML
     TextField txtFirstname;
     @FXML
-    TextField txtTelephone;;
+    TextField txtTelephone;
+
+
+    private ObservableList<Nurse> tableviewContent = FXCollections.observableArrayList();
+    private NurseDAO dao;
+
+
+
+    /**
+     * Initializes the corresponding fields. Is called as soon as the corresponding FXML file is to be displayed.
+     */
+    public void initialize() {
+        readAllAndShowInTableView();
+
+        this.colID.setCellValueFactory(new PropertyValueFactory<Nurse, Integer>("pid"));
+
+        //CellValuefactory zum Anzeigen der Daten in der TableView
+        this.colFirstName.setCellValueFactory(new PropertyValueFactory<Nurse, String>("firstName"));
+        //CellFactory zum Schreiben innerhalb der Tabelle
+        this.colFirstName.setCellFactory(TextFieldTableCell.forTableColumn());
+
+        this.colSurname.setCellValueFactory(new PropertyValueFactory<Nurse, String>("surname"));
+        this.colSurname.setCellFactory(TextFieldTableCell.forTableColumn());
+
+        this.colTelephone.setCellValueFactory(new PropertyValueFactory<Nurse, String>("telephoneNumber"));
+        this.colTelephone.setCellFactory(TextFieldTableCell.forTableColumn());
+
+        //Anzeigen der Daten
+        this.tableView.setItems(this.tableviewContent);
+        this.tableView.getSelectionModel().selectedItemProperty().addListener(this::onSelectionChanged);
+
+    }
+
+    /**
+     * calls readAll in {@link PatientDAO} and shows patients in the table
+     */
+    private void readAllAndShowInTableView() {
+        this.tableviewContent.clear();
+        this.dao = DAOFactory.getDAOFactory().createNurseDAO();
+        List<Nurse> allNurses;
+        try {
+            allNurses = dao.readAll();
+            for (Nurse p : allNurses) {
+                this.tableviewContent.add(p);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void onSelectionChanged(ObservableValue<? extends Nurse> obs, Nurse oldValue, Nurse newValue){
+        if (newValue != null){
+            currentSelection = newValue;
+        }
+    }
 }
