@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
@@ -21,4 +22,8 @@ public class UserController {
 
     @FXML
     private ChoiceBox<UserType> cbUserType;
+
+    public void setUserTypes(ObservableList<UserType> options){
+        cbUserType.setItems(options);
+    }
 }

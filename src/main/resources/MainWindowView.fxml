@@ -9,7 +9,7 @@
    <left>
       <VBox id="vBox" alignment="CENTER" spacing="50.0" styleClass="vBox" stylesheets="@Application.css" BorderPane.alignment="CENTER">
          <children>
-            <Button id="tbUser" fx:id="tbUser" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleShowAllPatient" prefWidth="105.0" text="Benutzer">
+            <Button id="tbUser" fx:id="tbUser" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#ShowNurseData" prefWidth="105.0" text="Benutzer">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>

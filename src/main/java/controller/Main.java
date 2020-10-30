@@ -48,6 +48,8 @@ public class Main extends Application {
                     System.exit(0);
                 }
             });
+            MainStage.StartCancer();
+
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
