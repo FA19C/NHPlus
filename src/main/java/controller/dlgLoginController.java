@@ -43,6 +43,9 @@ public class dlgLoginController {
             try {
                 User user = uDao.getUserByName(tbUserName.getText());
                 if(user != null && user.getLogginPasswort().equals(tbPassword.getText())){
+
+                    User.LogginUser = user;
+
                     FXMLLoader loader = new FXMLLoader(Main.class.getResource("/MainWindowView.fxml"));
                     Parent pane = null;
                     try {

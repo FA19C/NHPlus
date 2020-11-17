@@ -1,6 +1,8 @@
 package datastorage;
 
 import model.User;
+import model.UserType;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,8 +17,10 @@ public class UserDAO extends DAOimp<User> {
 
     @Override
     protected String getCreateStatementString(User User) {
-        return String.format("INSERT INTO treatment (ID, USERNAME, pass) VALUES " +
-                        "(%d, '%s', '%s')",User.getID(),User.getLogginName(),User.getLogginPasswort() );
+        return String.format("INSERT INTO treatment (ID, USERNAME, PASS, FIRSTNAME, LASTNAME, TEL, USER_TYPE) VALUES " +
+                        "(%d, '%s', '%s', '%s', '%s', '%s', %d)",
+                User.getID(),User.getLogginName(),User.getLogginPasswort(),User.getFirstName(),
+                User.getSurname(), User.getTelephoneNumber(), User.getUserType().dataBaseValue);
     }
 
     @Override
@@ -36,10 +40,12 @@ public class UserDAO extends DAOimp<User> {
 
     @Override
     protected User getInstanceFromResultSet(ResultSet set) throws SQLException {
-        User end = new User();
+        User end = new User(set.getString(4), set.getString(5));
         end.setID(set.getInt(1));
         end.setLogginName(set.getString(2));
         end.setLogginPasswort(set.getString(3));
+        end.setTelephoneNumber(set.getString(6));
+        end.setUserType(UserType.getUserTypeFromDataBaseValue(set.getInt(7)));
         return end;
     }
 
@@ -53,10 +59,12 @@ public class UserDAO extends DAOimp<User> {
         ArrayList<User> list = new ArrayList<User>();
         User end = null;
         while (set.next()) {
-            end = new User();
+            end = new User(set.getString(4), set.getString(5));
             end.setID(set.getInt(1));
             end.setLogginName(set.getString(2));
             end.setLogginPasswort(set.getString(3));
+            end.setTelephoneNumber(set.getString(6));
+            end.setUserType(UserType.getUserTypeFromDataBaseValue(set.getInt(7)));
             list.add(end);
         }
         return list;
