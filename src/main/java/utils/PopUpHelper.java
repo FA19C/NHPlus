@@ -14,6 +14,10 @@ import java.io.IOException;
  */
 public abstract class PopUpHelper {
 
+    /**
+     * Öffnet ein Popupfenster um den übergebenen String anzuzeigen
+     * @param text die nazuzeigende Narchicht
+     */
     public static void OpenPopUp(String text)
     {
         try {
@@ -29,7 +33,6 @@ public abstract class PopUpHelper {
             stage.setResizable(false);
             stage.showAndWait();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

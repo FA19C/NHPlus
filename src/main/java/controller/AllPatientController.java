@@ -6,16 +6,25 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import model.Patient;
 import model.Treatment;
 import utils.DateConverter;
 import datastorage.DAOFactory;
+
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 import javafx.util.Callback;
+import utils.PDFWriter;
 
 
 /**
@@ -39,6 +48,8 @@ public class AllPatientController {
     @FXML
     private TableColumn<Patient, Boolean> colLocked;
 
+    @FXML
+    Button btnExport;
     @FXML
     Button btnDelete;
     @FXML
@@ -157,6 +168,8 @@ public class AllPatientController {
             doUpdate(event);
     }
 
+
+
     /**
      * updates a patient by calling the update-Method in the {@link PatientDAO}
      * @param t row to be updated by the user (includes the patient)
@@ -251,6 +264,48 @@ public class AllPatientController {
             e.printStackTrace();
         }
         return darfGeloeschtWerden;
+    }
+
+    /**
+     * handles export-click-event
+     */
+    @FXML
+    public void handleExport()
+    {
+        Stage chooserStage = new Stage();
+        FileChooser chooser = new FileChooser();
+        TreatmentDAO tDao = DAOFactory.getDAOFactory().createTreatmentDAO();
+        Patient selectedItem = this.tableView.getSelectionModel().getSelectedItem();
+
+        if(selectedItem.getLocked())
+        {
+            utils.PopUpHelper.OpenPopUp("Patient ist gesperrt");
+            return;
+        }
+
+        chooser.setInitialFileName(selectedItem.getSurname() + ".pdf");
+        File file = chooser.showSaveDialog(chooserStage);
+        try
+        {
+            List<Treatment> treatments = tDao.readTreatmentsByPidLockedSensitiv(selectedItem.getPid());
+            PDFWriter.writePatientData(file, selectedItem, treatments);
+            if(file.exists())
+            {
+                try
+                {
+                    Desktop.getDesktop().open(file);
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+        catch (SQLException throwables)
+        {
+
+            throwables.printStackTrace();
+        }
     }
 
     /**
