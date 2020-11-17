@@ -92,7 +92,7 @@ public class AllTreatmentController {
         this.dao = DAOFactory.getDAOFactory().createTreatmentDAO();
         List<Treatment> allTreatments;
         try {
-            allTreatments = dao.readAll();
+            allTreatments = dao.readAllLockedSensitiv();
             for (Treatment treatment : allTreatments) {
                 this.tableviewContent.add(treatment);
             }
@@ -107,7 +107,11 @@ public class AllTreatmentController {
             patientList = (ArrayList<Patient>) dao.readAll();
             this.myComboBoxData.add("alle");
             for (Patient patient: patientList) {
-                this.myComboBoxData.add(patient.getSurname());
+                if(!patient.getLocked())
+                {
+                    this.myComboBoxData.add(patient.getSurname());
+                }
+
             }
         }catch(SQLException e){
             e.printStackTrace();
@@ -136,7 +140,7 @@ public class AllTreatmentController {
         List<Treatment> allTreatments;
         if(p.equals("alle")){
             try {
-                allTreatments= this.dao.readAll();
+                allTreatments= this.dao.readAllLockedSensitiv();
                 for (Treatment treatment : allTreatments) {
                     this.tableviewContent.add(treatment);
                 }
@@ -147,7 +151,7 @@ public class AllTreatmentController {
         Patient patient = searchInList(p);
         if(patient !=null){
             try {
-                allTreatments = dao.readTreatmentsByPid(patient.getPid());
+                allTreatments = dao.readTreatmentsByPidLockedSensitiv(patient.getPid());
                 for (Treatment treatment : allTreatments) {
                     this.tableviewContent.add(treatment);
                 }
@@ -244,8 +248,12 @@ public class AllTreatmentController {
     @FXML
     public void handleMouseClick(){
         int index = this.tableView.getSelectionModel().getSelectedIndex();
-        Treatment treatment = this.tableviewContent.get(index);
-        treatmentWindow(treatment);
+
+        if (index > -1) {
+            Treatment treatment = this.tableviewContent.get(index);
+            treatmentWindow(treatment);
+        }
+
     }
 
     public void newTreatmentWindow(Patient patient, Nurse nurse){

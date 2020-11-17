@@ -41,10 +41,42 @@ public class TreatmentDAO extends DAOimp<Treatment> {
         return m;
     }
 
+    public List<Treatment> readAllLockedSensitiv() throws SQLException {
+        ArrayList<Treatment> list = new ArrayList<Treatment>();
+        Treatment object = null;
+        Statement st = conn.createStatement();
+        ResultSet result = st.executeQuery(getReadAllStatementStringLockedSensitiv());
+        list = getListFromResultSet(result);
+        return list;
+    }
+
     @Override
     protected String getReadAllStatementString() {
         return "SELECT * FROM treatment";
     }
+
+    protected String getReadAllStatementStringLockedSensitiv() {
+        return "SELECT * FROM treatment a, patient b WHERE a.pid = b.pid and b.locked = FALSE";
+    }
+
+    public Treatment readNewestTreatmentByPid(long pid) throws SQLException
+    {
+        Treatment t = null;
+        Statement st = conn.createStatement();
+        ResultSet result = st.executeQuery(getReadNewestTreatmentByPid(pid));
+        if(result.next() != false)
+        {
+            t = getInstanceFromResultSet(result);
+        }
+
+        return t;
+    }
+
+    protected String getReadNewestTreatmentByPid(long pid)
+    {
+        return String.format("SELECT * FROM  TREATMENT t1 WHERE t1.PID = %d AND t1.TREATMENT_DATE = (SELECT max(TREATMENT_DATE) from TREATMENT WHERE t1.PID =TREATMENT.PID)", pid);
+    }
+
 
     @Override
     protected ArrayList<Treatment> getListFromResultSet(ResultSet result) throws SQLException {
@@ -83,6 +115,15 @@ public class TreatmentDAO extends DAOimp<Treatment> {
         return list;
     }
 
+    public List<Treatment> readTreatmentsByPidLockedSensitiv(long pid) throws SQLException {
+        ArrayList<Treatment> list = new ArrayList<Treatment>();
+        Treatment object = null;
+        Statement st = conn.createStatement();
+        ResultSet result = st.executeQuery(getReadAllTreatmentsOfOnePatientByPidLockedSensitiv(pid));
+        list = getListFromResultSet(result);
+        return list;
+    }
+
     public List<Treatment> readTreatmentsByNid(long nid) throws SQLException {
         ArrayList<Treatment> list = new ArrayList<Treatment>();
         Treatment object = null;
@@ -98,6 +139,10 @@ public class TreatmentDAO extends DAOimp<Treatment> {
 
     private String getReadAllTreatmentsOfOnePatientByPid(long pid){
         return String.format("SELECT * FROM treatment WHERE pid = %d", pid);
+    }
+
+    private String getReadAllTreatmentsOfOnePatientByPidLockedSensitiv(long pid){
+        return String.format("SELECT * FROM treatment a, patient b WHERE a.pid = %d and a.pid = b.pid and b.locked = FALSE", pid);
     }
 
     public void deleteByPid(int key) throws SQLException {

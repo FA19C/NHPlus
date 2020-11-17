@@ -6,6 +6,7 @@ import utils.DateConverter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -54,7 +55,7 @@ public class PatientDAO extends DAOimp<Patient> {
         LocalDate date = DateConverter.convertStringToLocalDate(result.getString(4));
         p = new Patient(result.getInt(1), result.getString(2),
                 result.getString(3), date, result.getString(5),
-                result.getString(6));
+                result.getString(6), result.getBoolean(7));
         return p;
     }
 
@@ -80,7 +81,7 @@ public class PatientDAO extends DAOimp<Patient> {
             LocalDate date = DateConverter.convertStringToLocalDate(result.getString(4));
             p = new Patient(result.getInt(1), result.getString(2),
                     result.getString(3), date,
-                    result.getString(5), result.getString(6));
+                    result.getString(5), result.getString(6), result.getBoolean(7));
             list.add(p);
         }
         return list;
@@ -93,10 +94,12 @@ public class PatientDAO extends DAOimp<Patient> {
      */
     @Override
     protected String getUpdateStatementString(Patient patient) {
+
         return String.format("UPDATE patient SET firstname = '%s', surname = '%s', dateOfBirth = '%s', carelevel = '%s', " +
-                "roomnumber = '%s' WHERE pid = %d", patient.getFirstName(), patient.getSurname(), patient.getDateOfBirth(),
-                patient.getCareLevel(), patient.getRoomnumber(), patient.getPid());
+                            "roomnumber = '%s', locked = '%s' WHERE pid = %d", patient.getFirstName(), patient.getSurname(), patient.getDateOfBirth(),
+                    patient.getCareLevel(), patient.getRoomnumber(), (patient.getLocked()), patient.getPid());
     }
+
 
     /**
      * generates a <code>delete</code>-Statement for a given key
@@ -106,5 +109,16 @@ public class PatientDAO extends DAOimp<Patient> {
     @Override
     protected String getDeleteStatementString(int key) {
         return String.format("Delete FROM patient WHERE pid=%d", key);
+    }
+
+    /**
+     * changes the locked value of the patient referenced by pId
+     * @param pId of the patient that will be changed
+     * @param locked lockedstatus
+     */
+    public void changeLockedStatusByPId(long pId, boolean locked) throws SQLException{
+        Statement st = conn.createStatement();
+        String sqlString = String.format("UPDATE patient SET locked = '%s' WHERE pid = %d", locked, pId);
+        st.executeUpdate(sqlString);
     }
 }

@@ -9,11 +9,13 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import model.Patient;
+import model.Treatment;
 import utils.DateConverter;
 import datastorage.DAOFactory;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
+import javafx.util.Callback;
 
 
 /**
@@ -34,6 +36,8 @@ public class AllPatientController {
     private TableColumn<Patient, String> colCareLevel;
     @FXML
     private TableColumn<Patient, String> colRoom;
+    @FXML
+    private TableColumn<Patient, Boolean> colLocked;
 
     @FXML
     Button btnDelete;
@@ -52,32 +56,52 @@ public class AllPatientController {
 
     private ObservableList<Patient> tableviewContent = FXCollections.observableArrayList();
     private PatientDAO dao;
+    private static final int mindestLoeschAlter = 10;
 
     /**
      * Initializes the corresponding fields. Is called as soon as the corresponding FXML file is to be displayed.
      */
     public void initialize() {
         readAllAndShowInTableView();
+        //CellFactory, die den Lockedstatus beachtet um Zellen uneditierbar zu machen
+        Callback<TableColumn<Patient, String>, TableCell<Patient, String>> cellFactoryNoticingLockedState = col -> {
+            TableCell<Patient, String> cell = TextFieldTableCell.<Patient>forTableColumn().call(col);
+            cell.itemProperty().addListener((obs, oldValue, newValue) -> {
+                TableRow row = cell.getTableRow();
+                if (row == null) {
+                    cell.setEditable(false);
+                } else {
+                    Patient item = (Patient) cell.getTableRow().getItem();
+                    if (item == null) {
+                        cell.setEditable(false);
+                    } else {
+                        cell.setEditable(!item.getLocked());
+                    }
+                }
+            });
+            return cell ;
+        };
 
         this.colID.setCellValueFactory(new PropertyValueFactory<Patient, Integer>("pid"));
 
         //CellValuefactory zum Anzeigen der Daten in der TableView
         this.colFirstName.setCellValueFactory(new PropertyValueFactory<Patient, String>("firstName"));
-        //CellFactory zum Schreiben innerhalb der Tabelle
-        this.colFirstName.setCellFactory(TextFieldTableCell.forTableColumn());
+        //CellFactory zum Schreiben innerhalb der Tabelle die nun auch Locked beachtet
+        this.colFirstName.setCellFactory(cellFactoryNoticingLockedState);
 
         this.colSurname.setCellValueFactory(new PropertyValueFactory<Patient, String>("surname"));
-        this.colSurname.setCellFactory(TextFieldTableCell.forTableColumn());
+        this.colSurname.setCellFactory(cellFactoryNoticingLockedState);
 
         this.colDateOfBirth.setCellValueFactory(new PropertyValueFactory<Patient, String>("dateOfBirth"));
-        this.colDateOfBirth.setCellFactory(TextFieldTableCell.forTableColumn());
+        this.colDateOfBirth.setCellFactory(cellFactoryNoticingLockedState);
 
         this.colCareLevel.setCellValueFactory(new PropertyValueFactory<Patient, String>("careLevel"));
-        this.colCareLevel.setCellFactory(TextFieldTableCell.forTableColumn());
+        this.colCareLevel.setCellFactory(cellFactoryNoticingLockedState);
 
         this.colRoom.setCellValueFactory(new PropertyValueFactory<Patient, String>("roomnumber"));
-        this.colRoom.setCellFactory(TextFieldTableCell.forTableColumn());
+        this.colRoom.setCellFactory(cellFactoryNoticingLockedState);
 
+        this.colLocked.setCellValueFactory(new PropertyValueFactory<Patient, Boolean>("locked"));
         //Anzeigen der Daten
         this.tableView.setItems(this.tableviewContent);
     }
@@ -127,9 +151,10 @@ public class AllPatientController {
      * @param event event including the value that a user entered into the cell
      */
     @FXML
-    public void handleOnEditRoomnumber(TableColumn.CellEditEvent<Patient, String> event){
-        event.getRowValue().setRoomnumber(event.getNewValue());
-        doUpdate(event);
+    public void handleOnEditRoomnumber(TableColumn.CellEditEvent<Patient, String> event)
+    {
+            event.getRowValue().setRoomnumber(event.getNewValue());
+            doUpdate(event);
     }
 
     /**
@@ -154,8 +179,16 @@ public class AllPatientController {
         try {
             allPatients = dao.readAll();
             for (Patient p : allPatients) {
+                if(p.getLocked() == true)
+                {
+                    p.setCareLevel("Gesperrt");
+                    p.setDateOfBirth("0000-01-01");
+                    p.setRoomnumber("Gesperrt");
+                }
                 this.tableviewContent.add(p);
+                this.tableView.refresh();
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -168,14 +201,56 @@ public class AllPatientController {
     public void handleDeleteRow() {
         TreatmentDAO tDao = DAOFactory.getDAOFactory().createTreatmentDAO();
         Patient selectedItem = this.tableView.getSelectionModel().getSelectedItem();
-        this.tableView.getItems().remove(selectedItem);
+        boolean darfGeloeschtWerden = DarfPatientGeloeschtWerden(selectedItem.getPid());
+
+        if(darfGeloeschtWerden)
+        {
+            this.tableView.getItems().remove(selectedItem);
+            try {
+                tDao.deleteByPid((int) selectedItem.getPid());
+                dao.deleteById((int) selectedItem.getPid());
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        else
+        {
+            if(selectedItem.getLocked())
+            {
+                utils.PopUpHelper.OpenPopUp("Patient darf noch nicht gelöscht werden");
+            }
+            else
+            {
+                handleLock();
+            }
+
+        }
+    }
+
+    public static boolean DarfPatientGeloeschtWerden(long pid)
+    {
+        boolean darfGeloeschtWerden = true;
+        TreatmentDAO tDao = DAOFactory.getDAOFactory().createTreatmentDAO();
         try {
-            tDao.deleteByPid((int) selectedItem.getPid());
-            dao.deleteById((int) selectedItem.getPid());
-        } catch (SQLException e) {
+            Treatment treatment = tDao.readNewestTreatmentByPid(pid);
+
+            if(treatment != null)
+            {
+                String date = treatment.getDate();
+                LocalDate newestDate = DateConverter.convertStringToLocalDate(date);
+                LocalDate deleteDate = LocalDate.now().minusYears(mindestLoeschAlter);
+
+                if(newestDate.isAfter(deleteDate))
+                {
+                    darfGeloeschtWerden = false;
+                }
+            }
+        }
+        catch (SQLException e)
+        {
             e.printStackTrace();
         }
-        this.handleAdd();
+        return darfGeloeschtWerden;
     }
 
     /**
@@ -190,7 +265,7 @@ public class AllPatientController {
         String carelevel = this.txtCarelevel.getText();
         String room = this.txtRoom.getText();
         try {
-            Patient p = new Patient(firstname, surname, date, carelevel, room);
+            Patient p = new Patient(firstname, surname, date, carelevel, room, false);
             dao.create(p);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -199,6 +274,38 @@ public class AllPatientController {
         clearTextfields();
     }
 
+    /**
+     *
+     */
+    @FXML
+    public void handleUnlock()
+    {
+        Patient selectedItem = this.tableView.getSelectionModel().getSelectedItem();
+        selectedItem.setLocked(false);
+        try {
+
+            dao.changeLockedStatusByPId(selectedItem.getPid(), selectedItem.getLocked());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        readAllAndShowInTableView();
+    }
+
+    /**
+     *
+     */
+    @FXML
+    public void handleLock()
+    {
+        Patient selectedItem = this.tableView.getSelectionModel().getSelectedItem();
+        selectedItem.setLocked(true);
+        try {
+            dao.changeLockedStatusByPId(selectedItem.getPid(), selectedItem.getLocked());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        readAllAndShowInTableView();
+    }
     /**
      * removes content from all textfields
      */
