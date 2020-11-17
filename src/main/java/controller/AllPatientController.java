@@ -240,6 +240,11 @@ public class AllPatientController {
         }
     }
 
+    /**
+     * Prueft ob Patient geloescht werden darf nach pid
+     * @param pid der Patient in Frage
+     * @return true wenn er geloescht werden darf sonst false
+     */
     public static boolean DarfPatientGeloeschtWerden(long pid)
     {
         boolean darfGeloeschtWerden = true;
@@ -330,7 +335,7 @@ public class AllPatientController {
     }
 
     /**
-     *
+     * entsperrt den aktiven Patienten
      */
     @FXML
     public void handleUnlock()
@@ -347,7 +352,7 @@ public class AllPatientController {
     }
 
     /**
-     *
+     * sperrt den aktiven Patienten
      */
     @FXML
     public void handleLock()

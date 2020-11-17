@@ -171,6 +171,9 @@ public class AllTreatmentController {
 
 
     @FXML
+    /**
+     * filtert die Treatments nach dem in der Combobox aktiven Pfleger
+     */
     public void handleComboBoxPfleger(){
         String n = this.comboBoxPfleger.getSelectionModel().getSelectedItem();
         this.tableviewContent.clear();
@@ -189,7 +192,7 @@ public class AllTreatmentController {
         Nurse nurse = searchInListNurse(n);
         if(nurse !=null){
             try {
-                allTreatments = dao.readTreatmentsByNid(nurse.getNid());
+                allTreatments = dao.readTreatmentsByNidLockedSensitiv(nurse.getNid());
                 for (Treatment treatment : allTreatments) {
                     this.tableviewContent.add(treatment);
                 }
@@ -199,6 +202,11 @@ public class AllTreatmentController {
         }
     }
 
+    /**
+     * Prueft ob der übergebene nachname in der Nurselist ist, die aus allen Nurses besteht und gibt sie zurrück
+     * @param surname der Nachname nach dem Gesucht werden soll
+     * @return null wenn keine Nurse gefunden wurde sonst die nurse
+     */
     private Nurse searchInListNurse(String surname){
         for (int i =0; i<this.nurseList.size();i++){
             if(this.nurseList.get(i).getSurname().equals(surname)){

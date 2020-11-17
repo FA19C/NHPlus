@@ -41,6 +41,11 @@ public class TreatmentDAO extends DAOimp<Treatment> {
         return m;
     }
 
+    /**
+     * Liest alle behandlungen aus von nicht gesperrten patienten
+     * @return alle behandlungen von nicht gesperrten patienten
+     * @throws SQLException
+     */
     public List<Treatment> readAllLockedSensitiv() throws SQLException {
         ArrayList<Treatment> list = new ArrayList<Treatment>();
         Treatment object = null;
@@ -55,10 +60,20 @@ public class TreatmentDAO extends DAOimp<Treatment> {
         return "SELECT * FROM treatment";
     }
 
+    /**
+     * Erstellt einen SQL-String für die Abfrage nach allen Behandlungen von nicht gesperrten Patienten
+     * @return einen SQL-String für die Abfrage nach allen Behandlungen von nicht gesperrten Patienten
+     */
     protected String getReadAllStatementStringLockedSensitiv() {
         return "SELECT * FROM treatment a, patient b WHERE a.pid = b.pid and (b.locked = FALSE or b.locked is NULL)";
     }
 
+    /**
+     * Erstellt eine Abfrage um herauszufinden wann ein Patient zuletzt behandelt wurde
+     * @param pid der Patient
+     * @return die letzte Behandlung
+     * @throws SQLException
+     */
     public Treatment readNewestTreatmentByPid(long pid) throws SQLException
     {
         Treatment t = null;
@@ -72,6 +87,11 @@ public class TreatmentDAO extends DAOimp<Treatment> {
         return t;
     }
 
+    /**
+     * Erstellt einen ABfragestring um herrauszufinden wan der Patient zuletzt behandelt wurde
+     * @param pid Patienten
+     * @return die SQL-Abfrage
+     */
     protected String getReadNewestTreatmentByPid(long pid)
     {
         return String.format("SELECT * FROM  TREATMENT t1 WHERE t1.PID = %d AND t1.TREATMENT_DATE = (SELECT max(TREATMENT_DATE) from TREATMENT WHERE t1.PID =TREATMENT.PID)", pid);
@@ -115,6 +135,12 @@ public class TreatmentDAO extends DAOimp<Treatment> {
         return list;
     }
 
+    /**
+     * Liest alle Treatments von einem Patienten und beachtet ob ideser gesperrt ist
+     * @param pid der Patient
+     * @return alle Treatments von einem Patienten und beachtet ob ideser gesperrt ist
+     * @throws SQLException
+     */
     public List<Treatment> readTreatmentsByPidLockedSensitiv(long pid) throws SQLException {
         ArrayList<Treatment> list = new ArrayList<Treatment>();
         Treatment object = null;
@@ -124,25 +150,46 @@ public class TreatmentDAO extends DAOimp<Treatment> {
         return list;
     }
 
-    public List<Treatment> readTreatmentsByNid(long nid) throws SQLException {
+    /**
+     * Liest alle Treatments von einem Pfleger und beachtet ob deser gesperrt ist
+     * @param nid der Pfleger
+     * @return alle Treatments von einem Pfleger und beachtet ob ideser gesperrt ist
+     * @throws SQLException
+     */
+    public List<Treatment> readTreatmentsByNidLockedSensitiv(long nid) throws SQLException {
         ArrayList<Treatment> list = new ArrayList<Treatment>();
         Treatment object = null;
         Statement st = conn.createStatement();
-        ResultSet result = st.executeQuery(getReadAllTreatmentsOfOneNurseByNid(nid));
+        ResultSet result = st.executeQuery(getReadAllTreatmentsOfOneNurseByNidLockedSensitiv(nid));
         list = getListFromResultSet(result);
         return list;
     }
 
-    private String getReadAllTreatmentsOfOneNurseByNid(long nid){
-        return String.format("SELECT * FROM treatment WHERE nid = %d", nid);
+    /**
+     * Erstellt SQL-String der alle Treatments nach Pfleger ausließt und beachtet ob der dazugehörige Patient gesperrt ist
+     * @param nid Pflegerid
+     * @return SQL-String der alle Treatments nach Pfleger ausließt und beachtet ob der dazugehörige Patient gesperrt ist
+     */
+    private String getReadAllTreatmentsOfOneNurseByNidLockedSensitiv(long nid){
+        return String.format("SELECT * FROM treatment a, patient b WHERE a.nid = %d and a.pid = b.pid and (b.locked = FALSE or b.locked IS NULL)", nid);
     }
 
+    /**
+     * Erstellt einen SQL-String der alle Treatments eines Patienten abfragt
+     * @param pid PatientenId
+     * @return einen SQL-String der alle Treatments eines Patienten abfragt
+     */
     private String getReadAllTreatmentsOfOnePatientByPid(long pid){
         return String.format("SELECT * FROM treatment WHERE pid = %d", pid);
     }
 
+    /**
+     * Erstellt einen SQL-String der alle Treatments eines Patienten abfragt und locked beachtet
+     * @param pid PatientenId
+     * @return einen SQL-String der alle Treatments eines Patienten abfragt und locked beachtet
+     */
     private String getReadAllTreatmentsOfOnePatientByPidLockedSensitiv(long pid){
-        return String.format("SELECT * FROM treatment a, patient b WHERE a.pid = %d and a.pid = b.pid and b.locked = FALSE", pid);
+        return String.format("SELECT * FROM treatment a, patient b WHERE a.pid = %d and a.pid = b.pid and (b.locked = FALSE or b.locked IS NULL)", pid);
     }
 
     public void deleteByPid(int key) throws SQLException {
@@ -150,6 +197,11 @@ public class TreatmentDAO extends DAOimp<Treatment> {
         st.executeUpdate(String.format("Delete FROM treatment WHERE pid= %d", key));
     }
 
+    /**
+     * Erstellt einen SQL-String der ein Treatment nach PflegerId loescht
+     * @param key die PflegerId
+     * @throws SQLException
+     */
     public void deleteByNid(int key) throws SQLException {
         Statement st = conn.createStatement();
         st.executeUpdate(String.format("Delete FROM treatment WHERE nid= %d", key));

@@ -17,6 +17,9 @@ import java.time.LocalDate;
 import java.util.List;
 import javafx.util.Callback;
 
+/**
+ * eine Klasse die ein einfaches Popup bereitstellt
+ */
 public class PopUpViewController
 {
     @FXML
