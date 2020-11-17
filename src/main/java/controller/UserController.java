@@ -4,6 +4,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
+import javafx.scene.control.PasswordField;
 import model.UserType;
 
 public class UserController {
@@ -19,6 +20,9 @@ public class UserController {
 
     @FXML
     private TextField tbTel;
+
+    @FXML
+    private PasswordField tbPasswordField;
 
     @FXML
     private ChoiceBox<UserType> cbUserType;
