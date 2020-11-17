@@ -41,27 +41,15 @@ public class NewTreatmentController {
     private Stage stage;
     private Nurse nurse;
 
-    public void initialize(AllTreatmentController controller, Stage stage, Patient patient) {
+
+    public void initialize(AllTreatmentController controller, Stage stage, Patient patient, Nurse nurse) {
         this.controller= controller;
         this.patient = patient;
-        this.stage = stage;
-        showPatientData();
-
-    }
-
-    public void initializePfleger(AllTreatmentController controller, Stage stage, Nurse nurse) {
-        this.controller= controller;
         this.nurse = nurse;
         this.stage = stage;
         showNurseData();
+
     }
-
-
-    private void showPatientData(){
-        this.lblFirstname.setText(patient.getFirstName());
-        this.lblSurname.setText(patient.getSurname());
-    }
-
     private void showNurseData(){
         this.lblNurseID.setText(String.valueOf(this.nurse.getNid()));
     }

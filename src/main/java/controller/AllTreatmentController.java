@@ -3,7 +3,6 @@ package controller;
 import datastorage.NurseDAO;
 import datastorage.PatientDAO;
 import datastorage.TreatmentDAO;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -13,7 +12,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import model.Nurse;
 import model.Patient;
 import model.Treatment;
@@ -180,7 +178,7 @@ public class AllTreatmentController {
         List<Treatment> allTreatments;
         if(n.equals("alle")){
             try {
-                allTreatments= this.dao.readAll();
+                allTreatments= this.dao.readAllLockedSensitiv();
                 for (Treatment treatment : allTreatments) {
                     this.tableviewContent.add(treatment);
                 }
@@ -256,6 +254,16 @@ public class AllTreatmentController {
 
     }
 
+
+
+
+
+    private Stage stage;
+
+    public void initializeNewTreatmentWindow(Stage stage){
+        this.stage = stage;
+    }
+
     public void newTreatmentWindow(Patient patient, Nurse nurse){
         try {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("/NewTreatmentView.fxml"));
@@ -264,11 +272,15 @@ public class AllTreatmentController {
             //da die primaryStage noch im Hintergrund bleiben soll
             Stage stage = new Stage();
 
-            NewTreatmentController controller = loader.getController();
+           /* NewTreatmentController controller = loader.getController();
             controller.initialize(this, stage, patient);
 
+
+            */
+
             NewTreatmentController controller2 = loader.getController();
-            controller2.initializePfleger(this, stage, nurse);
+            controller2.initialize(this, stage,patient ,nurse);
+
 
 
             stage.setScene(scene);

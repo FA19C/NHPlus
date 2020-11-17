@@ -19,6 +19,7 @@ public class Main extends Application {
 
     private Stage primaryStage;
 
+
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -27,8 +28,10 @@ public class Main extends Application {
 
     public void mainWindow() {
         try {
-            FXMLLoader loader = new FXMLLoader(Main.class.getResource("/MainWindowView.fxml"));
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("/Login.fxml"));
             BorderPane pane = loader.load();
+            LoginController loginController = loader.getController();
+            loginController.initialize(primaryStage);
 
             Scene scene = new Scene(pane);
             this.primaryStage.setTitle("NHPlus");
