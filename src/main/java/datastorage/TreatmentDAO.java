@@ -56,7 +56,7 @@ public class TreatmentDAO extends DAOimp<Treatment> {
     }
 
     protected String getReadAllStatementStringLockedSensitiv() {
-        return "SELECT * FROM treatment a, patient b WHERE a.pid = b.pid and b.locked = FALSE";
+        return "SELECT * FROM treatment a, patient b WHERE a.pid = b.pid and (b.locked = FALSE or b.locked is NULL)";
     }
 
     public Treatment readNewestTreatmentByPid(long pid) throws SQLException
