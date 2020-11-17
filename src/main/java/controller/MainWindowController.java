@@ -27,11 +27,7 @@ public class MainWindowController {
         }
         UserController controller = loader.getController();
 
-        ObservableList<UserType> options =
-                FXCollections.observableArrayList(
-                        UserType.Normal,
-                        UserType.Nurse
-                );
+        ObservableList<UserType> options = FXCollections.observableArrayList(UserType.values());
         controller.setUserTypes(options);
     }
 
