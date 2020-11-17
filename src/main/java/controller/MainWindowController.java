@@ -16,6 +16,8 @@ public class MainWindowController {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("/AllPatientView.fxml"));
         try {
             mainBorderPane.setCenter(loader.load());
+
+            //this.mainBorderPane.setClip(loader.load());
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -32,4 +34,17 @@ public class MainWindowController {
         }
         AllTreatmentController controller = loader.getController();
     }
+
+
+    @FXML
+    private void handleShowAllNurses(ActionEvent e) {
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource("/AllNurseView.fxml"));
+        try {
+            mainBorderPane.setCenter(loader.load());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        AllNurseViewController controller = loader.getController();
+    }
+
 }

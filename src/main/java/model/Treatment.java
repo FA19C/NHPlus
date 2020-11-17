@@ -1,6 +1,7 @@
 package model;
 
 import utils.DateConverter;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -12,6 +13,8 @@ public class Treatment {
     private LocalTime end;
     private String description;
     private String remarks;
+    private long nid;
+
 
     public Treatment(long pid, LocalDate date, LocalTime begin,
                      LocalTime end, String description, String remarks) {
@@ -21,18 +24,34 @@ public class Treatment {
         this.end = end;
         this.description = description;
         this.remarks = remarks;
+
     }
 
-    public Treatment(long tid, long pid, LocalDate date, LocalTime begin,
-                     LocalTime end, String description, String remarks) {
-        this.tid = tid;
+    public Treatment(long pid, LocalDate date, LocalTime begin,
+                     LocalTime end, String description, String remarks,long nid) {
         this.pid = pid;
-        this.date = date;
         this.date = date;
         this.begin = begin;
         this.end = end;
         this.description = description;
         this.remarks = remarks;
+        this.nid = nid;
+    }
+
+    public Treatment(long tid, long pid, LocalDate date, LocalTime begin,
+                     LocalTime end, String description, String remarks, long nid) {
+        this.tid = tid;
+        this.pid = pid;
+        this.date = date;
+        this.begin = begin;
+        this.end = end;
+        this.description = description;
+        this.remarks = remarks;
+        this.nid = nid;
+    }
+
+    public long getNid() {
+        return this.nid;
     }
 
     public long getTid() {
@@ -47,22 +66,22 @@ public class Treatment {
         return date.toString();
     }
 
-    public String getBegin() {
-        return begin.toString();
-    }
-
-    public String getEnd() {
-        return end.toString();
-    }
-
     public void setDate(String s_date) {
         LocalDate date = DateConverter.convertStringToLocalDate(s_date);
         this.date = date;
     }
 
+    public String getBegin() {
+        return begin.toString();
+    }
+
     public void setBegin(String begin) {
         LocalTime time = DateConverter.convertStringToLocalTime(begin);
         this.begin = time;
+    }
+
+    public String getEnd() {
+        return end.toString();
     }
 
     public void setEnd(String end) {
@@ -93,6 +112,7 @@ public class Treatment {
                 "\nBegin: " + this.begin +
                 "\nEnd: " + this.end +
                 "\nDescription: " + this.description +
-                "\nRemarks: " + this.remarks + "\n";
+                "\nRemarks: " + this.remarks +
+                "\nNID: " + this.nid + "\n";
     }
 }

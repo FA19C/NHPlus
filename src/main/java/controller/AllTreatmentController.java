@@ -1,7 +1,9 @@
 package controller;
 
+import datastorage.NurseDAO;
 import datastorage.PatientDAO;
 import datastorage.TreatmentDAO;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -11,6 +13,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.util.Callback;
+import model.Nurse;
 import model.Patient;
 import model.Treatment;
 import datastorage.DAOFactory;
@@ -35,7 +39,13 @@ public class AllTreatmentController {
     @FXML
     private TableColumn<Treatment, String> colDescription;
     @FXML
+    private TableColumn<Treatment, Integer> colNID;
+
+    @FXML
     private ComboBox<String> comboBox;
+
+    @FXML
+    private ComboBox<String> comboBoxPfleger;
     @FXML
     private Button btnNewTreatment;
     @FXML
@@ -46,13 +56,23 @@ public class AllTreatmentController {
     private TreatmentDAO dao;
     private ObservableList<String> myComboBoxData =
             FXCollections.observableArrayList();
+
+    private ObservableList<String> myComboBoxDataPfleger =
+            FXCollections.observableArrayList();
     private ArrayList<Patient> patientList;
+
+    private ArrayList<Nurse> nurseList;
+
     private Main main;
 
     public void initialize() {
         readAllAndShowInTableView();
         comboBox.setItems(myComboBoxData);
         comboBox.getSelectionModel().select(0);
+
+        comboBoxPfleger.setItems(myComboBoxDataPfleger);
+        comboBoxPfleger.getSelectionModel().select(1);
+
         this.main = main;
 
         this.colID.setCellValueFactory(new PropertyValueFactory<Treatment, Integer>("tid"));
@@ -61,8 +81,10 @@ public class AllTreatmentController {
         this.colBegin.setCellValueFactory(new PropertyValueFactory<Treatment, String>("begin"));
         this.colEnd.setCellValueFactory(new PropertyValueFactory<Treatment, String>("end"));
         this.colDescription.setCellValueFactory(new PropertyValueFactory<Treatment, String>("description"));
+        this.colNID.setCellValueFactory(new PropertyValueFactory<Treatment, Integer>("nid"));
         this.tableView.setItems(this.tableviewContent);
         createComboBoxData();
+        createComboBoxDataPfleger();
     }
 
     public void readAllAndShowInTableView() {
@@ -91,6 +113,20 @@ public class AllTreatmentController {
             e.printStackTrace();
         }
     }
+
+    private void createComboBoxDataPfleger(){
+        NurseDAO dao = DAOFactory.getDAOFactory().createNurseDAD();
+        try {
+            nurseList = (ArrayList<Nurse>) dao.readAll();
+            this.myComboBoxDataPfleger.add("alle");
+            for (Nurse nurse: nurseList) {
+                this.myComboBoxDataPfleger.add(nurse.getSurname());
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+
 
     @FXML
     public void handleComboBox(){
@@ -121,6 +157,7 @@ public class AllTreatmentController {
         }
     }
 
+
     private Patient searchInList(String surname){
         for (int i =0; i<this.patientList.size();i++){
             if(this.patientList.get(i).getSurname().equals(surname)){
@@ -129,6 +166,46 @@ public class AllTreatmentController {
         }
         return null;
     }
+
+
+    @FXML
+    public void handleComboBoxPfleger(){
+        String n = this.comboBoxPfleger.getSelectionModel().getSelectedItem();
+        this.tableviewContent.clear();
+        this.dao = DAOFactory.getDAOFactory().createTreatmentDAO();
+        List<Treatment> allTreatments;
+        if(n.equals("alle")){
+            try {
+                allTreatments= this.dao.readAll();
+                for (Treatment treatment : allTreatments) {
+                    this.tableviewContent.add(treatment);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        Nurse nurse = searchInListNurse(n);
+        if(nurse !=null){
+            try {
+                allTreatments = dao.readTreatmentsByNid(nurse.getNid());
+                for (Treatment treatment : allTreatments) {
+                    this.tableviewContent.add(treatment);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private Nurse searchInListNurse(String surname){
+        for (int i =0; i<this.nurseList.size();i++){
+            if(this.nurseList.get(i).getSurname().equals(surname)){
+                return this.nurseList.get(i);
+            }
+        }
+        return null;
+    }
+
 
     @FXML
     public void handleDelete(){
@@ -147,13 +224,19 @@ public class AllTreatmentController {
         try{
             String p = this.comboBox.getSelectionModel().getSelectedItem();
             Patient patient = searchInList(p);
-            newTreatmentWindow(patient);
+
+            String n = this.comboBoxPfleger.getSelectionModel().getSelectedItem();
+            Nurse nurse= searchInListNurse(n);
+
+            newTreatmentWindow(patient, nurse);
+
+
         }
         catch(NullPointerException e){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Information");
-            alert.setHeaderText("Patient für die Behandlung fehlt!");
-            alert.setContentText("Wählen Sie über die Combobox einen Patienten aus!");
+            alert.setHeaderText("Patient oder pfleger für die Behandlung fehlt!");
+            alert.setContentText("Wählen Sie über die Combobox einen Patienten und einen pfleger aus!");
             alert.showAndWait();
         }
     }
@@ -165,7 +248,7 @@ public class AllTreatmentController {
         treatmentWindow(treatment);
     }
 
-    public void newTreatmentWindow(Patient patient){
+    public void newTreatmentWindow(Patient patient, Nurse nurse){
         try {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("/NewTreatmentView.fxml"));
             AnchorPane pane = loader.load();
@@ -176,6 +259,10 @@ public class AllTreatmentController {
             NewTreatmentController controller = loader.getController();
             controller.initialize(this, stage, patient);
 
+            NewTreatmentController controller2 = loader.getController();
+            controller2.initializePfleger(this, stage, nurse);
+
+
             stage.setScene(scene);
             stage.setResizable(false);
             stage.showAndWait();
@@ -184,6 +271,7 @@ public class AllTreatmentController {
             e.printStackTrace();
         }
     }
+
 
     public void treatmentWindow(Treatment treatment){
         try {

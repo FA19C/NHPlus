@@ -1,11 +1,13 @@
 package controller;
 
 import datastorage.DAOFactory;
+import datastorage.NurseDAO;
 import datastorage.PatientDAO;
 import datastorage.TreatmentDAO;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import model.Nurse;
 import model.Patient;
 import model.Treatment;
 import utils.DateConverter;
@@ -23,6 +25,8 @@ public class TreatmentController {
     @FXML
     private TextField txtEnd;
     @FXML
+    private Label lblNursID;
+    @FXML
     private TextField txtDescription;
     @FXML
     private TextArea taRemarks;
@@ -37,13 +41,18 @@ public class TreatmentController {
     private Stage stage;
     private Patient patient;
     private Treatment treatment;
+    private Nurse nurse;
 
     public void initializeController(AllTreatmentController controller, Stage stage, Treatment treatment) {
         this.stage = stage;
         this.controller= controller;
         PatientDAO pDao = DAOFactory.getDAOFactory().createPatientDAO();
+        NurseDAO nDao = DAOFactory.getDAOFactory().createNurseDAD();
+
         try {
+            this.nurse = nDao.read((int) treatment.getNid());
             this.patient = pDao.read((int) treatment.getPid());
+
             this.treatment = treatment;
             showData();
         } catch (SQLException e) {
@@ -60,6 +69,8 @@ public class TreatmentController {
         this.txtEnd.setText(this.treatment.getEnd());
         this.txtDescription.setText(this.treatment.getDescription());
         this.taRemarks.setText(this.treatment.getRemarks());
+        this.lblNursID.setText(String.valueOf(this.treatment.getNid()));
+
     }
 
     @FXML
