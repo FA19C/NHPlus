@@ -1,13 +1,19 @@
 package controller;
 
+import datastorage.ConnectionBuilder;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import utils.EncryptionHelper;
 
+import java.io.File;
 import java.io.IOException;
 
 public class MainWindowController {
@@ -19,6 +25,18 @@ public class MainWindowController {
 
     public void initializeMainWindowController(Stage stage){
         this.stage = stage;
+        this.stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent e) {
+                ConnectionBuilder.closeConnection();
+                File ziel = new File("db/dblocked.script");
+                File quelle = new File("db/nursingHomeDB.script");
+                quelle.delete();
+                EncryptionHelper.encryptFile(quelle, ziel);
+                Platform.exit();
+                System.exit(0);
+            }
+        });
     }
 
 
@@ -36,6 +54,19 @@ public class MainWindowController {
             stage.setScene(scene);
             stage.setResizable(false);
             stage.showAndWait();
+
+            this.stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent e) {
+                    ConnectionBuilder.closeConnection();
+                    File ziel = new File("db/dblocked.script");
+                    File quelle = new File("db/nursingHomeDB.script");
+                    quelle.delete();
+                    EncryptionHelper.encryptFile(quelle, ziel);
+                    Platform.exit();
+                    System.exit(0);
+                }
+            });
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

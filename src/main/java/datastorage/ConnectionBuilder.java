@@ -11,9 +11,8 @@ public class ConnectionBuilder {
         try {
             Class.forName("org.hsqldb.jdbc.JDBCDriver");
             System.out.println("Working Directory = " + System.getProperty("user.dir"));
-
+            
             conn = DriverManager.getConnection("jdbc:hsqldb:db/nursingHomeDB;user=SA;password=SA");
-            //conn = DriverManager.getConnection("jdbc:hsqldb:db/nursingHomeDB;crypt_key=\"+key+\";crypt_type=AES\", \"SA\", \"\";user=SA;password=SA");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
             System.out.println("Treiberklasse konnte nicht gefunden werden!");

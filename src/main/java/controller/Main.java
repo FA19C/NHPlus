@@ -11,7 +11,9 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import utils.EncryptionHelper;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -23,6 +25,9 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
+        File ziel = new File("db/nursingHomeDB.script");
+        File quelle = new File("db/dblocked.script");
+        EncryptionHelper.decryptFile(quelle, ziel);
         mainWindow();
     }
 
@@ -43,6 +48,11 @@ public class Main extends Application {
                 @Override
                 public void handle(WindowEvent e) {
                     ConnectionBuilder.closeConnection();
+                    File ziel = new File("db/dblocked.script");
+                    File quelle = new File("db/nursingHomeDB.script");
+
+                    EncryptionHelper.encryptFile(quelle, ziel);
+                    quelle.delete();
                     Platform.exit();
                     System.exit(0);
                 }

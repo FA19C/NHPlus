@@ -44,8 +44,8 @@ public class LoginController {
 //        String name = username.getText();
   //      String passwort = password.getText();
 
-        String name = EncryptionHelper.encrypt(username.getText());
-        String passwort = EncryptionHelper.encrypt(password.getText());
+        String name = EncryptionHelper.encryptString(username.getText());
+        String passwort = EncryptionHelper.encryptString(password.getText());
 
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("/MainWindowView.fxml"));
 
