@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -14,7 +15,6 @@ public class MainWindowController {
     @FXML
     private BorderPane mainBorderPane;
 
-
     private Stage stage;
 
     public void initializeMainWindowController(Stage stage){
@@ -22,6 +22,25 @@ public class MainWindowController {
     }
 
 
+    @FXML
+    public void onHandleLoginErstellen()
+    {
+        try {
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("/CreateLoginView.fxml"));
+            AnchorPane pane = loader.load();
+            CreateLoginController controller = loader.getController();
+
+            Scene scene = new Scene(pane);
+            Stage stage = new Stage();
+            controller.initialize(stage);
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.showAndWait();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 
     @FXML
     private void handleShowAllPatient(ActionEvent e) {

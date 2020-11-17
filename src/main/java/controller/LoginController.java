@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import utils.EncryptionHelper;
 
 import java.io.IOException;
 import java.sql.*;
@@ -40,8 +41,11 @@ public class LoginController {
         Connection connection;
         PreparedStatement ps;
 
-        String name = username.getText();
-        String passwort = password.getText();
+//        String name = username.getText();
+  //      String passwort = password.getText();
+
+        String name = EncryptionHelper.encrypt(username.getText());
+        String passwort = EncryptionHelper.encrypt(password.getText());
 
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("/MainWindowView.fxml"));
 
