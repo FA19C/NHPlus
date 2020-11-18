@@ -16,11 +16,11 @@ public class UserDAO extends DAOimp<User> {
     }
 
     @Override
-    protected String getCreateStatementString(User User) {
-        return String.format("INSERT INTO treatment (ID, USERNAME, PASS, FIRSTNAME, LASTNAME, TEL, USER_TYPE) VALUES " +
+    protected String getCreateStatementString(User user) {
+        return String.format("INSERT INTO USER (ID, USERNAME, PASS, FIRSTNAME, LASTNAME, TEL, USER_TYPE) VALUES " +
                         "(%d, '%s', '%s', '%s', '%s', '%s', %d)",
-                User.getID(),User.getLogginName(),User.getLogginPasswort(),User.getFirstName(),
-                User.getSurname(), User.getTelephoneNumber(), User.getUserType().dataBaseValue);
+                user.getID(),user.getLogginName(),user.getLogginPasswort(),user.getFirstName(),
+                user.getSurname(), user.getTelephoneNumber(), user.getUserType().dataBaseValue);
     }
 
     @Override
@@ -72,7 +72,10 @@ public class UserDAO extends DAOimp<User> {
 
     @Override
     protected String getUpdateStatementString(User user) {
-        return String.format("UPDATE user SET ID = %d, USERNAME ='%s', pass = '%s'", user.getID(),user.getLogginName(), user.getLogginPasswort());
+        return String.format("UPDATE USER SET" +
+                        " ID = %d, USERNAME = '%s', PASS = '%s', FIRSTNAME = '%s', LASTNAME = '%s', TEL = '%s', USER_TYPE = %d",
+                user.getID(),user.getLogginName(),user.getLogginPasswort(),user.getFirstName(),
+                user.getSurname(), user.getTelephoneNumber(), user.getUserType().dataBaseValue);
     }
 
     @Override
