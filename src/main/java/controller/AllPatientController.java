@@ -54,8 +54,6 @@ public class AllPatientController {
     private TableColumn<Patient, String> colCareLevel;
     @FXML
     private TableColumn<Patient, String> colRoom;
-    @FXML
-    private TableColumn<Patient, String> colIsLocked;
 
     @FXML
     Button btnDelete;
@@ -103,9 +101,6 @@ public class AllPatientController {
 
         this.colRoom.setCellValueFactory(new PropertyValueFactory<Patient, String>("roomnumber"));
         this.colRoom.setCellFactory(TextFieldTableCell.forTableColumn());
-
-        this.colIsLocked.setCellValueFactory(new PropertyValueFactory<Patient, String>("islocked"));
-        this.colIsLocked.setCellFactory(TextFieldTableCell.forTableColumn());
 
         //Anzeigen der Daten
         this.tableView.setItems(this.tableviewContent);
@@ -230,6 +225,10 @@ public class AllPatientController {
         readAllAndShowInTableView();
         clearTextfields();
     }
+
+    /**
+     * Mehthod for handling the button press for the PDF export btn
+     */
     @FXML
     private void handleBtnPDFExport(){
         Patient selectedItem = this.tableView.getSelectionModel().getSelectedItem();
@@ -239,6 +238,12 @@ public class AllPatientController {
         catch (Exception e){}
     }
 
+    /**
+     * Method for creating and opening a PDF made from Patient data
+     * @param selectedItem the Patient data to convert
+     * @throws URISyntaxException
+     * @throws IOException
+     */
     private void convertToPDFAndOpen(Patient selectedItem)  throws URISyntaxException, IOException {
         URL pathURl = Thread.currentThread().getContextClassLoader().getResource("Templates/PDFTemplate.html");
         Path path = Paths.get(pathURl.toURI());
@@ -256,6 +261,11 @@ public class AllPatientController {
         openFile(pdf);
     }
 
+    /**
+     * Opens a File
+     * @param file the File that should be opened
+     * @throws IOException
+     */
     private void openFile(File file) throws IOException {
         String path = file.getAbsolutePath();
         if (OSDetector.isWindows())
@@ -286,6 +296,11 @@ public class AllPatientController {
         setLockState(selectedItem, true);
     }
 
+    /**
+     * Mehtod for setting the current lockstate of a Patient
+     * @param p the Patient
+     * @param lockState the new lockstate
+     */
     private void setLockState(Patient p, boolean lockState){
         p.setLockState(lockState);
         try {
@@ -308,6 +323,12 @@ public class AllPatientController {
         this.txtRoom.clear();
     }
 
+    /**
+     * Event Mehthod that gets called the the current row selections has changed
+     * @param obs the ObservableValue
+     * @param oldValue the old value
+     * @param newValue the new Value
+     */
     private void onSelectionChanged(ObservableValue<? extends Patient> obs, Patient oldValue, Patient newValue){
         if (newValue != null){
             currentSelection = newValue;

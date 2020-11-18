@@ -78,9 +78,11 @@ public class PatientDAO extends DAOimp<Patient> {
         Patient p = null;
         while (result.next()) {
             LocalDate date = DateConverter.convertStringToLocalDate(result.getString(4));
+            Boolean islocked = result.getBoolean(7);
+
             p = new Patient(result.getInt(1), result.getString(2),
                     result.getString(3), date,
-                    result.getString(5), result.getString(6), result.getBoolean(7));
+                    result.getString(5), result.getString(6), islocked);
             list.add(p);
         }
         return list;
