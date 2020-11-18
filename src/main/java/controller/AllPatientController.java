@@ -185,7 +185,7 @@ public class AllPatientController {
             }
             else
             {
-                utils.PopUpHelper.OpenPopUp("Patient darf noch nicht geändertt werden");
+                utils.PopUpHelper.OpenPopUp("Patient darf noch nicht geändert werden");
                 this.readAllAndShowInTableView();
             }
 
