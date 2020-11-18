@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import model.User;
 import model.UserType;
 
 import java.io.IOException;
@@ -27,12 +28,9 @@ public class MainWindowController {
         }
         UserController controller = loader.getController();
 
-        ObservableList<UserType> options =
-                FXCollections.observableArrayList(
-                        UserType.Normal,
-                        UserType.Nurse
-                );
+        ObservableList<UserType> options = FXCollections.observableArrayList(UserType.values());
         controller.setUserTypes(options);
+        controller.setUser(User.LogginUser);
     }
 
     @FXML
