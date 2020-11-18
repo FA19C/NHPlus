@@ -123,8 +123,11 @@ public class AllPatientController {
      */
     @FXML
     public void handleOnEditFirstname(TableColumn.CellEditEvent<Patient, String> event){
-        event.getRowValue().setFirstName(event.getNewValue());
-        doUpdate(event);
+
+            event.getRowValue().setFirstName(event.getNewValue());
+            doUpdate(event);
+
+
     }
 
     /**
@@ -176,7 +179,16 @@ public class AllPatientController {
      */
     private void doUpdate(TableColumn.CellEditEvent<Patient, String> t) {
         try {
-            dao.update(t.getRowValue());
+            if(darfPatientGeloeschtWerden(t.getRowValue().getPid()))
+            {
+                dao.update(t.getRowValue());
+            }
+            else
+            {
+                utils.PopUpHelper.OpenPopUp("Patient darf noch nicht geändertt werden");
+                this.readAllAndShowInTableView();
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -214,7 +226,7 @@ public class AllPatientController {
     public void handleDeleteRow() {
         TreatmentDAO tDao = DAOFactory.getDAOFactory().createTreatmentDAO();
         Patient selectedItem = this.tableView.getSelectionModel().getSelectedItem();
-        boolean darfGeloeschtWerden = DarfPatientGeloeschtWerden(selectedItem.getPid());
+        boolean darfGeloeschtWerden = darfPatientGeloeschtWerden(selectedItem.getPid());
 
         if(darfGeloeschtWerden)
         {
@@ -245,7 +257,7 @@ public class AllPatientController {
      * @param pid der Patient in Frage
      * @return true wenn er geloescht werden darf sonst false
      */
-    public static boolean DarfPatientGeloeschtWerden(long pid)
+    public static boolean darfPatientGeloeschtWerden(long pid)
     {
         boolean darfGeloeschtWerden = true;
         TreatmentDAO tDao = DAOFactory.getDAOFactory().createTreatmentDAO();
