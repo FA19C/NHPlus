@@ -28,16 +28,6 @@ public class UserDAO extends DAOimp<User> {
         return String.format("SELECT * FROM user WHERE ID = %d", key);
     }
 
-    public User getUserByName(String name) throws SQLException {
-        User object = null;
-        Statement st = conn.createStatement();
-        ResultSet result = st.executeQuery(String.format("SELECT * FROM user WHERE USERNAME = '%s'", name));
-        if (result.next()) {
-            object = getInstanceFromResultSet(result);
-        }
-        return object;
-    }
-
     @Override
     protected User getInstanceFromResultSet(ResultSet set) throws SQLException {
         User end = new User(set.getString(4), set.getString(5));
@@ -81,5 +71,15 @@ public class UserDAO extends DAOimp<User> {
     @Override
     protected String getDeleteStatementString(int key) {
         return String.format("Delete FROM user WHERE id= %d", key);
+    }
+
+    public User getUserByName(String name) throws SQLException {
+        User object = null;
+        Statement st = conn.createStatement();
+        ResultSet result = st.executeQuery(String.format("SELECT * FROM user WHERE USERNAME = '%s'", name));
+        if (result.next()) {
+            object = getInstanceFromResultSet(result);
+        }
+        return object;
     }
 }

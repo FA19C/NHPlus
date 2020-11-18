@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 public class User extends Person {
 
     // Getter and Setter are for Faggots
@@ -14,8 +16,6 @@ public class User extends Person {
     public User(String firstName, String surname) {
         super(firstName, surname);
     }
-
-    // private Person UserPerson;
 
     public void setID(int ID) {
         this.ID = ID;
@@ -56,16 +56,5 @@ public class User extends Person {
     public void setTelephoneNumber(String telephoneNumber) {
         this.telephoneNumber = telephoneNumber;
     }
-
-    /*
-    public void setUserPerson(Person userPerson) {
-        UserPerson = userPerson;
-    }
-
-    public Person getUserPerson() {
-        return UserPerson;
-    }
-    */
-
 }
 
