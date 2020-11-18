@@ -83,6 +83,8 @@ public class MainWindowController {
             MainStage.primaryStage.setScene(scene);
             MainStage.primaryStage.setResizable(false);
 
+            User.LogginUser = null;
+
         } catch (IOException e) {
             e.printStackTrace();
         }
