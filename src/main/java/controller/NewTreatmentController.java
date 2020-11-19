@@ -61,6 +61,9 @@ public class NewTreatmentController {
     }
 
     @FXML
+    /**
+     * Handle fuer hinzufuegen
+     */
     public void handleAdd(){
         LocalDate date = this.datepicker.getValue();
         LocalTime begin = DateConverter.convertStringToLocalTime(txtBegin.getText());
@@ -75,6 +78,10 @@ public class NewTreatmentController {
         stage.close();
     }
 
+    /**
+     * Erstellt das Treatment auf der Datenbak
+     * @param treatment die Rohdaten
+     */
     private void createTreatment(Treatment treatment) {
         TreatmentDAO dao = DAOFactory.getDAOFactory().createTreatmentDAO();
         try {
@@ -85,6 +92,9 @@ public class NewTreatmentController {
     }
 
     @FXML
+    /**
+     * Handle fuer Abbrechen
+     */
     public void handleCancel(){
         stage.close();
     }

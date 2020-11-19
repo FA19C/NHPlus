@@ -30,6 +30,11 @@ public class PopUpViewController
 
     private Stage stage;
 
+    /**
+     * Innitialisiert den Popupcontroller
+     * @param text der anzuzeigende Text
+     * @param stage die Stage worauf das Popup angezeigt wird
+     */
     public void initialize(String text, Stage stage)
     {
         lblText.setText(text);
@@ -37,6 +42,9 @@ public class PopUpViewController
     }
 
     @FXML
+    /**
+     * Handle fuer das schließen ueber OK
+     */
     public void onHandleOk()
     {
         this.stage.close();
