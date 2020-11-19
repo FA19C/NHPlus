@@ -23,15 +23,15 @@ public class UserDAO extends DAOimp<User> {
 
     /**
      * Returns a SQL command for creating a User
-     * @param User the User data to be inserted into the Database
+     * @param user the User data to be inserted into the Database
      * @return the SQL command string
      */
     @Override
-    protected String getCreateStatementString(User User) {
-        return String.format("INSERT INTO treatment (ID, USERNAME, PASS, FIRSTNAME, LASTNAME, TEL, USER_TYPE) VALUES " +
+    protected String getCreateStatementString(User user) {
+        return String.format("INSERT INTO USER (ID, USERNAME, PASS, FIRSTNAME, LASTNAME, TEL, USER_TYPE) VALUES " +
                         "(%d, '%s', '%s', '%s', '%s', '%s', %d)",
-                User.getID(),User.getLogginName(),User.getLoginPasswort(),User.getFirstName(),
-                User.getSurname(), User.getTelephoneNumber(), User.getUserType().dataBaseValue);
+                user.getID(),user.getLogginName(),user.getLoginPasswort(),user.getFirstName(),
+                user.getSurname(), user.getTelephoneNumber(), user.getUserType().dataBaseValue);
     }
 
     /**
@@ -43,6 +43,7 @@ public class UserDAO extends DAOimp<User> {
     protected String getReadByIDStatementString(int key) {
         return String.format("SELECT * FROM user WHERE ID = %d", key);
     }
+
 
     /**
      * Returns a User by searching the table with the given username
@@ -59,6 +60,7 @@ public class UserDAO extends DAOimp<User> {
         }
         return object;
     }
+
 
     /**
      * Returns a single user read from the given Resultset
@@ -115,7 +117,10 @@ public class UserDAO extends DAOimp<User> {
      */
     @Override
     protected String getUpdateStatementString(User user) {
-        return String.format("UPDATE user SET ID = %d, USERNAME ='%s', pass = '%s'", user.getID(),user.getLogginName(), user.getLoginPasswort());
+        return String.format("UPDATE USER SET" +
+                        " ID = %d, USERNAME = '%s', PASS = '%s', FIRSTNAME = '%s', LASTNAME = '%s', TEL = '%s', USER_TYPE = %d",
+                user.getID(),user.getLogginName(),user.getLoginPasswort(),user.getFirstName(),
+                user.getSurname(), user.getTelephoneNumber(), user.getUserType().dataBaseValue);
     }
 
     /**
@@ -127,4 +132,5 @@ public class UserDAO extends DAOimp<User> {
     protected String getDeleteStatementString(int key) {
         return String.format("Delete FROM user WHERE id= %d", key);
     }
+
 }

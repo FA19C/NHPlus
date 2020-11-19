@@ -112,4 +112,19 @@ public class MainWindowController {
             e.printStackTrace();
         }
     }
+
+
+    @FXML
+    private void btAllUser_Action(ActionEvent event) {
+        try{
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("/AllUserView.fxml"));
+            mainBorderPane.setCenter(loader.load());
+
+            AllUserController controller = loader.getController();
+            controller.init();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
