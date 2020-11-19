@@ -14,6 +14,9 @@ import model.User;
 import java.io.IOException;
 import java.sql.SQLException;
 
+/**
+ * Controller containing all logic for the Login View
+ */
 public class dlgLoginController {
 
     private UserDAO uDao;
@@ -24,16 +27,27 @@ public class dlgLoginController {
     @FXML
     private PasswordField tbPassword;
 
+    /**
+     * Default contructor
+     */
     public dlgLoginController(){
         uDao = DAOFactory.getDAOFactory().createUserDAO();
     }
 
+    /**
+     * Eventmethod for handling the click of the cancel button
+     * @param event
+     */
     @FXML
     void cancel_Action(ActionEvent event) {
         System.out.println("cancel_Click");
         MainStage.primaryStage.close();
     }
 
+    /**
+     * Eventmethod for handling the click of the ok button
+     * @param event
+     */
     @FXML
     void ok_Action(ActionEvent event) {
         System.out.println("ok_Click " + tbUserName.getText() + " " + tbPassword.getText());
@@ -42,7 +56,7 @@ public class dlgLoginController {
 
             try {
                 User user = uDao.getUserByName(tbUserName.getText());
-                if(user != null && user.getLogginPasswort().equals(tbPassword.getText())){
+                if(user != null && user.getLoginPasswort().equals(tbPassword.getText())){
 
                     User.LogginUser = user;
 

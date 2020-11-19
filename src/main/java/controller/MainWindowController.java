@@ -13,11 +13,18 @@ import model.UserType;
 
 import java.io.IOException;
 
+/**
+ * Controller class for the MainWindow View
+ */
 public class MainWindowController {
 
     @FXML
     private BorderPane mainBorderPane;
 
+    /**
+     * Eventmethod for showing the current Users Nurse Data
+     * @param e Event params
+     */
     @FXML
     private void ShowNurseData(ActionEvent e) {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("/UserView.fxml"));
@@ -33,6 +40,10 @@ public class MainWindowController {
         controller.setUser(User.LogginUser);
     }
 
+    /**
+     * Eventmethod for showing the AllPatient View
+     * @param e
+     */
     @FXML
     private void handleShowAllPatient(ActionEvent e) {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("/AllPatientView.fxml"));
@@ -46,6 +57,10 @@ public class MainWindowController {
 
     }
 
+    /**
+     * EventMethod for showing the All Caregiver View
+     * @param e
+     */
     @FXML
     private void handleShowAllNurses(ActionEvent e) {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("/AllCaregiverView.fxml"));
@@ -57,6 +72,10 @@ public class MainWindowController {
         AllCaregiverController controller = loader.getController();
     }
 
+    /**
+     * EventhMethod for showing the AllTreatment View
+     * @param e
+     */
     @FXML
     private void handleShowAllTreatments(ActionEvent e) {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("/AllTreatmentView.fxml"));
@@ -69,6 +88,10 @@ public class MainWindowController {
 
     }
 
+    /**
+     * EventMethod for logging out of The application if the lock button is pressed
+     * @param event
+     */
     @FXML
     private void btSperrenAction(ActionEvent event) {
         System.out.println("btSperrenAction");

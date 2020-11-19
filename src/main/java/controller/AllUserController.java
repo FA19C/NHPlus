@@ -11,6 +11,9 @@ import javafx.scene.control.Label;
 import model.User;
 import model.UserType;
 
+/**
+ * Controller containing all logic for the AllUser View
+ */
 public class AllUserController {
 
     @FXML
@@ -40,6 +43,9 @@ public class AllUserController {
     @FXML
     private ChoiceBox<UserType> cbUserType;
 
+    /**
+     * Default Constructor
+     */
     public AllUserController(){
         ObservableList<UserType> options = FXCollections.observableArrayList(UserType.values());
         options.add(0, null);

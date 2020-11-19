@@ -2,7 +2,11 @@ package lib;
 
 import java.util.Base64;
 
+/**
+ * Helper class for encrypting strings
+ */
 public final class EncryptionService {
+
 
     public static String encrypt(String input)
     {

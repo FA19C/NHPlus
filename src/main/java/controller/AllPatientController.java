@@ -324,7 +324,7 @@ public class AllPatientController {
     }
 
     /**
-     * Event Mehthod that gets called the the current row selections has changed
+     * Event Method that gets called when the current row selections has changed
      * @param obs the ObservableValue
      * @param oldValue the old value
      * @param newValue the new Value

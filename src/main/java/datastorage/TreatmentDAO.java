@@ -12,12 +12,23 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class providing Methods for managing Treatments in the Databse
+ */
 public class TreatmentDAO extends DAOimp<Treatment> {
-
+    /**
+     * Default constructor for the TreatmentDAO class
+     * @param conn
+     */
     public TreatmentDAO(Connection conn) {
         super(conn);
     }
 
+    /**
+     * Returns a SQL command for creating a treatment
+     * @param treatment the treatment data to be inserted into the Database
+     * @return the SQL command string
+     */
     @Override
     protected String getCreateStatementString(Treatment treatment) {
         return String.format("INSERT INTO treatment (pid, treatment_date, begin, end, description, remarks) VALUES " +
@@ -31,6 +42,12 @@ public class TreatmentDAO extends DAOimp<Treatment> {
         return String.format("SELECT * FROM treatment WHERE tid = %d", key);
     }
 
+    /**
+     * Returns a single treatment read from the given Resultset
+     * @param result the ResultSet to be read
+     * @return the user
+     * @throws SQLException
+     */
     @Override
     protected Treatment getInstanceFromResultSet(ResultSet result) throws SQLException {
         LocalDate date = DateConverter.convertStringToLocalDate(result.getString(3));
@@ -41,11 +58,21 @@ public class TreatmentDAO extends DAOimp<Treatment> {
         return m;
     }
 
+    /**
+     * Returns a SQL command string for selecting all rows in the treatment Table
+     * @return the SQL command string
+     */
     @Override
     protected String getReadAllStatementString() {
         return "SELECT * FROM treatment";
     }
 
+    /**
+     * Returns a ArrayList of Treatments read from the given Resultset
+     * @param result the ResultSet to be read
+     * @return a ArrayList of Treatments
+     * @throws SQLException
+     */
     @Override
     protected ArrayList<Treatment> getListFromResultSet(ResultSet result) throws SQLException {
         ArrayList<Treatment> list = new ArrayList<Treatment>();
@@ -61,6 +88,11 @@ public class TreatmentDAO extends DAOimp<Treatment> {
         return list;
     }
 
+    /**
+     * Returns the Update SQL command string for the treatment Table
+     * @param treatment the new treatment data
+     * @return the SQL command string
+     */
     @Override
     protected String getUpdateStatementString(Treatment treatment) {
         return String.format("UPDATE treatment SET pid = %d, treatment_date ='%s', begin = '%s', end = '%s'," +
@@ -87,6 +119,11 @@ public class TreatmentDAO extends DAOimp<Treatment> {
         return String.format("SELECT * FROM treatment WHERE pid = %d", pid);
     }
 
+    /**
+     * Returns the SQL command string for deleting a Treatment
+     * @param key the Treatment ID
+     * @return the SQL command string
+     */
     public void deleteByPid(int key) throws SQLException {
         Statement st = conn.createStatement();
         st.executeUpdate(String.format("Delete FROM treatment WHERE pid= %d", key));

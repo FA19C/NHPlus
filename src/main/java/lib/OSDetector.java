@@ -1,5 +1,8 @@
 package lib;
 
+/**
+ * Helper class for Detecting the current OS
+ */
 public class OSDetector {
     private static boolean isWindows = false;
     private static boolean isLinux = false;

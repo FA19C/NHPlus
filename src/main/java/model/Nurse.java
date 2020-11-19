@@ -1,6 +1,8 @@
 package model;
 
-
+/**
+ * Model class for the Nurses
+ */
 public class Nurse extends Person {
 
     private long pid;
@@ -29,10 +31,18 @@ public class Nurse extends Person {
         this.telephoneNumber = telephoneNumber;
     }
 
+    /**
+     * Getter for the Nurses phonenumber
+     * @return
+     */
     public String getTelephoneNumber() {
         return telephoneNumber;
     }
 
+    /**
+     * Getter for the Nurses ID
+     * @return
+     */
     public long getPid() {
         return pid;
     }

@@ -18,6 +18,9 @@ import model.Nurse;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * Controller class for the AllCaregiver View
+ */
 public class AllCaregiverController {
 
     private Nurse currentSelection;
@@ -92,6 +95,12 @@ public class AllCaregiverController {
         }
     }
 
+    /**
+     * Event Method that gets called when the current row selections has changed
+     * @param obs the ObservableValue
+     * @param oldValue the old value
+     * @param newValue the new Value
+     */
     private void onSelectionChanged(ObservableValue<? extends Nurse> obs, Nurse oldValue, Nurse newValue){
         if (newValue != null){
             currentSelection = newValue;

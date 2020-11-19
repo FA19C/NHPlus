@@ -55,17 +55,17 @@ public class Patient extends Person {
      * @param careLevel
      * @param roomnumber
      */
-    public Patient(long pid, String firstName, String surname, LocalDate dateOfBirth, String careLevel, String roomnumber, boolean isLocked) {
+    public Patient(long pid, String firstName, String surname, LocalDate dateOfBirth, String careLevel, String roomnumber, Boolean isLocked) {
         super(firstName, surname);
         this.pid = pid;
         this.dateOfBirth = dateOfBirth;
         this.careLevel = careLevel;
         this.roomnumber = roomnumber;
-        this.isLocked = isLocked;
+        this.isLocked = (isLocked != null) ? isLocked : false;
     }
 
     /**
-     *
+     * Getter for the Patient ID
      * @return patient id
      */
     public long getPid() {
@@ -73,7 +73,7 @@ public class Patient extends Person {
     }
 
     /**
-     *
+     *  Getter for the Patient Birthdate
      * @return date of birth as a string
      */
     public String getDateOfBirth() {
@@ -81,6 +81,7 @@ public class Patient extends Person {
     }
 
     /**
+     * Setter for the Patient Birthdate
      * convert given param to a localDate and store as new <code>birthOfDate</code>
      * @param dateOfBirth as string in the following format: YYYY-MM-DD
      */
@@ -90,7 +91,7 @@ public class Patient extends Person {
     }
 
     /**
-     *
+     * Getter for the Patient Carelevel
      * @return careLevel
      */
     public String getCareLevel() {
@@ -98,7 +99,7 @@ public class Patient extends Person {
     }
 
     /**
-     *
+     * Setter for the Patient Carelevel
      * @param careLevel new care level
      */
     public void setCareLevel(String careLevel) {
@@ -106,7 +107,7 @@ public class Patient extends Person {
     }
 
     /**
-     *
+     * Getter for the Patients roomnumber
      * @return roomNumber as string
      */
     public String getRoomnumber() {
@@ -114,7 +115,7 @@ public class Patient extends Person {
     }
 
     /**
-     *
+     * Setter for the Patients roomnumber
      * @param roomnumber
      */
     public void setRoomnumber(String roomnumber) {
@@ -134,16 +135,30 @@ public class Patient extends Person {
         return false;
     }
 
+    /**
+     * Method for getting the Patients Data lockstate
+     * @return
+     */
     public boolean isLocked(){ return this.isLocked; }
 
+    /**
+     * Method for Locking a Patients data
+     */
     public void lockPatient(){
         this.isLocked = true;
     }
 
+    /**
+     * Method for Unlocking a Patients data
+     */
     public void unlockPatient(){
         this.isLocked = false;
     }
 
+    /**
+     * Setter for the Patient data lockstate
+     * @param lockState
+     */
     public void setLockState(boolean lockState){
         this.isLocked = lockState;
     }

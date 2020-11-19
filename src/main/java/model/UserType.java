@@ -1,5 +1,8 @@
 package model;
 
+/**
+ * Enum for the UserTypes
+ */
 public enum UserType {
     Normal("Normal", 0),
     Nurse("Krankenschwester", 1),
@@ -18,6 +21,11 @@ public enum UserType {
         return displayString != null ? displayString : super.toString();
     }
 
+    /**
+     * Method for getting a UserType for an integer
+     * @param value the integer
+     * @return the UserType
+     */
     public static UserType getUserTypeFromDataBaseValue(int value){
         switch (value){
             case 0 : return UserType.Normal;

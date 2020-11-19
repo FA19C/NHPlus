@@ -19,6 +19,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controller class for the AllTreatment View
+ */
 public class AllTreatmentController {
     @FXML
     private TableView<Treatment> tableView;
@@ -49,6 +52,9 @@ public class AllTreatmentController {
     private ArrayList<Patient> patientList;
     private Main main;
 
+    /**
+     * Default Initialization Method
+     */
     public void initialize() {
         readAllAndShowInTableView();
         comboBox.setItems(myComboBoxData);
@@ -65,6 +71,9 @@ public class AllTreatmentController {
         createComboBoxData();
     }
 
+    /**
+     * Method for reading all Treatments in the DB and showing them in the TableView
+     */
     public void readAllAndShowInTableView() {
         this.tableviewContent.clear();
         this.dao = DAOFactory.getDAOFactory().createTreatmentDAO();
@@ -79,6 +88,9 @@ public class AllTreatmentController {
         }
     }
 
+    /**
+     * Method for creating the ComboBox data
+     */
     private void createComboBoxData(){
         PatientDAO dao = DAOFactory.getDAOFactory().createPatientDAO();
         try {
@@ -92,6 +104,9 @@ public class AllTreatmentController {
         }
     }
 
+    /**
+     * Eventmethod for handling the ComboBox
+     */
     @FXML
     public void handleComboBox(){
         String p = this.comboBox.getSelectionModel().getSelectedItem();
@@ -130,6 +145,9 @@ public class AllTreatmentController {
         return null;
     }
 
+    /**
+     * Eventmethod handling the click for Deleting a treatment
+     */
     @FXML
     public void handleDelete(){
         int index = this.tableView.getSelectionModel().getSelectedIndex();
@@ -142,6 +160,9 @@ public class AllTreatmentController {
         }
     }
 
+    /**
+     * Eventmethod handling the click for New Treatment Window
+     */
     @FXML
     public void handleNewTreatment() {
         try{
@@ -158,6 +179,9 @@ public class AllTreatmentController {
         }
     }
 
+    /**
+     * Eventmethod handling the click of the Treatment Window
+     */
     @FXML
     public void handleMouseClick(){
         int index = this.tableView.getSelectionModel().getSelectedIndex();
@@ -165,6 +189,10 @@ public class AllTreatmentController {
         treatmentWindow(treatment);
     }
 
+    /**
+     * Opens the Window for creating a new Treatment for a Patient
+     * @param patient the Patient that the Treatment gets added to
+     */
     public void newTreatmentWindow(Patient patient){
         try {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("/NewTreatmentView.fxml"));
@@ -185,6 +213,10 @@ public class AllTreatmentController {
         }
     }
 
+    /**
+     * Opens a detail window for the given Treatment
+     * @param treatment the treatment to be viewed
+     */
     public void treatmentWindow(Treatment treatment){
         try {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("/TreatmentView.fxml"));

@@ -51,7 +51,9 @@ public class MainStage {
         }
 
         private void applyCancer(Parent parent){
-            if(parent != null){
+            return;
+            /*if(parent != null){
+
                 parent.setRotate(parent.getRotate() + r.nextDouble()*10);
                 parent.setScaleX(r.nextDouble() + 0.5);
                 parent.setScaleX(r.nextDouble() + 0.5);
@@ -61,7 +63,7 @@ public class MainStage {
                     if(n instanceof Parent)
                         applyCancer((Parent) n);
                 }
-            }
+            }*/
         }
     }
 }

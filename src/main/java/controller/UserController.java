@@ -8,6 +8,9 @@ import javafx.scene.control.PasswordField;
 import model.UserType;
 import model.User;
 
+/**
+ * Controller class containing all logic for the User View
+ */
 public class UserController {
 
     @FXML
@@ -30,16 +33,24 @@ public class UserController {
 
     private User user;
 
+    /**
+     * Method for setting the UserTypes
+     * @param options
+     */
     public void setUserTypes(ObservableList<UserType> options){
         cbUserType.setItems(options);
     }
 
+    /**
+     * Method for setting the Current User
+     * @param user
+     */
     public void setUser(User user){
         this.user = user;
         tbUserName.setText(user.getLogginName());
         tbFirstName.setText(user.getFirstName());
         tbLastName.setText(user.getSurname());
-        tbPasswordField.setText(user.getLogginPasswort());
+        tbPasswordField.setText(user.getLoginPasswort());
         cbUserType.setValue(user.getUserType());
     }
 
