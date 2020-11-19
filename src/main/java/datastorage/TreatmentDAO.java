@@ -44,7 +44,7 @@ public class TreatmentDAO extends DAOimp<Treatment> {
     /**
      * Liest alle behandlungen aus von nicht gesperrten patienten
      * @return alle behandlungen von nicht gesperrten patienten
-     * @throws SQLException
+     * @throws SQLException SQLException bei lesen des lockedstatus aller Patienten
      */
     public List<Treatment> readAllLockedSensitiv() throws SQLException {
         ArrayList<Treatment> list = new ArrayList<Treatment>();
@@ -72,7 +72,7 @@ public class TreatmentDAO extends DAOimp<Treatment> {
      * Erstellt eine Abfrage um herauszufinden wann ein Patient zuletzt behandelt wurde
      * @param pid der Patient
      * @return die letzte Behandlung
-     * @throws SQLException
+     * @throws SQLException SQLException bei herausfinden der neuesten Behandlung
      */
     public Treatment readNewestTreatmentByPid(long pid) throws SQLException
     {
@@ -139,7 +139,7 @@ public class TreatmentDAO extends DAOimp<Treatment> {
      * Liest alle Treatments von einem Patienten und beachtet ob ideser gesperrt ist
      * @param pid der Patient
      * @return alle Treatments von einem Patienten und beachtet ob ideser gesperrt ist
-     * @throws SQLException
+     * @throws SQLException SQLException bei lesen der Patiententreatments lockedsensitiv
      */
     public List<Treatment> readTreatmentsByPidLockedSensitiv(long pid) throws SQLException {
         ArrayList<Treatment> list = new ArrayList<Treatment>();
@@ -154,7 +154,7 @@ public class TreatmentDAO extends DAOimp<Treatment> {
      * Liest alle Treatments von einem Pfleger und beachtet ob deser gesperrt ist
      * @param nid der Pfleger
      * @return alle Treatments von einem Pfleger und beachtet ob ideser gesperrt ist
-     * @throws SQLException
+     * @throws SQLException SQLException bei lesen der Treatments nach NurseID
      */
     public List<Treatment> readTreatmentsByNidLockedSensitiv(long nid) throws SQLException {
         ArrayList<Treatment> list = new ArrayList<Treatment>();
@@ -200,7 +200,7 @@ public class TreatmentDAO extends DAOimp<Treatment> {
     /**
      * Erstellt einen SQL-String der ein Treatment nach PflegerId loescht
      * @param key die PflegerId
-     * @throws SQLException
+     * @throws SQLException SQLException bei loeschen der Nurse
      */
     public void deleteByNid(int key) throws SQLException {
         Statement st = conn.createStatement();

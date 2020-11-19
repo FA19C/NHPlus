@@ -41,7 +41,13 @@ public class NewTreatmentController {
     private Stage stage;
     private Nurse nurse;
 
-
+    /**
+     * Initialisiert den NewTreatmentcontroller
+     * @param controller der Treatmentcontroller woraus das NewTreatmentfenster geoeffnet wurde
+     * @param stage die Buene worauf das Fenster ausgefuehrt werden soll
+     * @param patient der Patient des Treatments
+     * @param nurse der Pfleger
+     */
     public void initialize(AllTreatmentController controller, Stage stage, Patient patient, Nurse nurse) {
         this.controller= controller;
         this.patient = patient;

@@ -23,6 +23,10 @@ public class MainWindowController {
 
     private Stage stage;
 
+    /**
+     * Initialisiert den Controller
+     * @param stage die Buehne worauf das Mainwindow dagestellt wird
+     */
     public void initializeMainWindowController(Stage stage){
         this.stage = stage;
         this.stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -41,6 +45,9 @@ public class MainWindowController {
 
 
     @FXML
+    /**
+     * händelt das öffnen des Logijndaten-Erstellen Fensters
+     */
     public void onHandleLoginErstellen()
     {
         try {
@@ -72,8 +79,11 @@ public class MainWindowController {
             e.printStackTrace();
         }
     }
-
     @FXML
+    /**
+     * Handled das Öffnen des Patientviews
+     * @param e uebergebene Eventparams
+     */
     private void handleShowAllPatient(ActionEvent e) {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("/AllPatientView.fxml"));
         try {
@@ -87,6 +97,10 @@ public class MainWindowController {
     }
 
     @FXML
+    /**
+     * Handled das Öffnen des Treatmentviews
+     * @param e uebergebene Eventparams
+     */
     private void handleShowAllTreatments(ActionEvent e) {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("/AllTreatmentView.fxml"));
         try {
@@ -99,6 +113,10 @@ public class MainWindowController {
 
 
     @FXML
+    /**
+     * Handled das Öffnen des Nurseviews
+     * @param e uebergebene Eventparams
+     */
     private void handleShowAllNurses(ActionEvent e) {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("/AllNurseView.fxml"));
         try {
@@ -110,14 +128,18 @@ public class MainWindowController {
     }
 
     @FXML
+    /**
+     * Handled ausloggen
+     * @param event uebergebene Eventparams
+     */
     public void sperren(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("/Login.fxml"));
-        Stage bühne = new Stage();
+        Stage buene = new Stage();
         Scene szene = new Scene(loader.load(), 990, 850);
-        bühne.setScene(szene);
-        bühne.show();
+        buene.setScene(szene);
+        buene.show();
         LoginController controller = loader.getController();
-        controller.initialize(bühne);
+        controller.initialize(buene);
         stage.close();
 
 

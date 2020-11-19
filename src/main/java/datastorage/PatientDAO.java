@@ -17,7 +17,7 @@ public class PatientDAO extends DAOimp<Patient> {
 
     /**
      * constructs Onbject. Calls the Constructor from <code>DAOImp</code> to store the connection.
-     * @param conn
+     * @param conn Die Connection
      */
     public PatientDAO(Connection conn) {
         super(conn);
@@ -115,6 +115,7 @@ public class PatientDAO extends DAOimp<Patient> {
      * changes the locked value of the patient referenced by pId
      * @param pId of the patient that will be changed
      * @param locked lockedstatus
+     * @throws SQLException SQLException bei setzen des Lockedstatus
      */
     public void changeLockedStatusByPId(long pId, boolean locked) throws SQLException{
         Statement st = conn.createStatement();

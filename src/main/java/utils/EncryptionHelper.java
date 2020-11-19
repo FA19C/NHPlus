@@ -24,8 +24,8 @@ public abstract class EncryptionHelper
 
     /**
      * Verschluesstelt den übergebenen String
-     * @param zuVerschluesseln
-     * @return
+     * @param zuVerschluesseln der zuverschluesselnde String
+     * @return der String verschlusselt
      */
     public static String encryptString(String zuVerschluesseln)
     {
@@ -44,8 +44,8 @@ public abstract class EncryptionHelper
 
     /**
      * Entschluesselt den übergebenen String
-     * @param zuentschluesseln
-     * @return
+     * @param zuentschluesseln der zu entschlüsselnde String
+     * @return der entschluesselte String
      */
     public static String decryptString(String zuentschluesseln)
     {

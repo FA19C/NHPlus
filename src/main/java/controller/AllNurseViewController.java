@@ -116,7 +116,7 @@ public class AllNurseViewController {
     }
 
     /**
-
+     * Liest alle EInträge und zeigt sie an
      */
     private void readAllAndShowInTableView() {
         this.tableviewContent.clear();
