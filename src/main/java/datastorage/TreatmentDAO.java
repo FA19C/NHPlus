@@ -18,7 +18,7 @@ import java.util.List;
 public class TreatmentDAO extends DAOimp<Treatment> {
     /**
      * Default constructor for the TreatmentDAO class
-     * @param conn
+     * @param conn the database connection
      */
     public TreatmentDAO(Connection conn) {
         super(conn);
@@ -37,6 +37,11 @@ public class TreatmentDAO extends DAOimp<Treatment> {
                 treatment.getRemarks());
     }
 
+    /**
+     * Gets a SQL command string for selecting a Treatment by its ID
+     * @param key the ID
+     * @return
+     */
     @Override
     protected String getReadByIDStatementString(int key) {
         return String.format("SELECT * FROM treatment WHERE tid = %d", key);
@@ -101,11 +106,22 @@ public class TreatmentDAO extends DAOimp<Treatment> {
                 treatment.getTid());
     }
 
+    /**
+     * Gets the SQL command for deleting a Treatment with the given key
+     * @param key the key
+     * @return
+     */
     @Override
     protected String getDeleteStatementString(int key) {
         return String.format("Delete FROM treatment WHERE tid= %d", key);
     }
 
+    /**
+     * Gets a List of Treatments by searching for the patient ID
+     * @param pid the Patient ID
+     * @return
+     * @throws SQLException
+     */
     public List<Treatment> readTreatmentsByPid(long pid) throws SQLException {
         ArrayList<Treatment> list = new ArrayList<Treatment>();
         Treatment object = null;
@@ -115,6 +131,11 @@ public class TreatmentDAO extends DAOimp<Treatment> {
         return list;
     }
 
+    /**
+     * Gets a SQL command string for reading all Treatments by their patient ID
+     * @param pid the Patient ID
+     * @return
+     */
     private String getReadAllTreatmentsOfOnePatientByPid(long pid){
         return String.format("SELECT * FROM treatment WHERE pid = %d", pid);
     }

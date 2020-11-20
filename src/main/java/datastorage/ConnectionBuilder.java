@@ -7,6 +7,9 @@ import java.sql.SQLException;
 public class ConnectionBuilder {
     private static Connection conn;
 
+    /**
+     * Default constructor for the ConnectionBuilder class
+     */
     private ConnectionBuilder() {
         try {
             Class.forName("org.hsqldb.jdbc.JDBCDriver");
@@ -22,6 +25,10 @@ public class ConnectionBuilder {
         }
     }
 
+    /**
+     * Gets the current Database connection or returns a new one if none is present
+     * @return the current Database connection
+     */
     public static Connection getConnection() {
         if (conn == null) {
             new ConnectionBuilder();
@@ -29,6 +36,9 @@ public class ConnectionBuilder {
         return conn;
     }
 
+    /**
+     * Closes the current active Database connection
+     */
     public static void closeConnection() {
         try {
             conn.close();
