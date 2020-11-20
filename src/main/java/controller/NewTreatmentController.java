@@ -55,10 +55,19 @@ public class NewTreatmentController {
 
     }
 
+    /**
+     * zeigt den Namen von Patient auf dem Fenster(NewTreatmentView) beim Hinzufuegen einer neuen Behandlung
+     */
     private void showPatientData(){
         this.lblFirstname.setText(patient.getFirstName());
         this.lblSurname.setText(patient.getSurname());
     }
+
+
+    /**
+     * zeigt die ID von Pfleger auf dem Fenster(NewTreatmentView) beim Hinzufuegen einer neuen Behandlung und nachdem ein Pfleger über
+     *  das Combox hinzugefuegt wurde.
+     */
 
     private void showNurseData(){
         this.lblNurseID.setText(String.valueOf(this.nurse.getNid()));

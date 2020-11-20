@@ -294,15 +294,10 @@ public class AllTreatmentController {
 
     }
 
-
-
-
-
-    private Stage stage;
-
-    public void initializeNewTreatmentWindow(Stage stage){
-        this.stage = stage;
-    }
+    /**
+     * Handle fuers Zeigen von neuTreatmentView Fenster
+     * Wir bei Hinzfuegen einer neuen Behandlung gezeigt
+     */
 
     public void newTreatmentWindow(Patient patient, Nurse nurse){
         try {
@@ -331,7 +326,10 @@ public class AllTreatmentController {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Handle fuers Zeigen von der schon erstellten Behandlung
+     * Beim Doppel Klick auf einer Behandlung wird dieses Fenster(TreatmentView) gezeigt.
+     */
 
     public void treatmentWindow(Treatment treatment){
         try {

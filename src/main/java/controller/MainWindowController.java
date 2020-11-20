@@ -135,7 +135,7 @@ public class MainWindowController {
     public void sperren(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("/Login.fxml"));
         Stage buene = new Stage();
-        Scene szene = new Scene(loader.load(), 990, 850);
+        Scene szene = new Scene(loader.load(), 926.0, 688.0);
         buene.setScene(szene);
         buene.show();
         LoginController controller = loader.getController();

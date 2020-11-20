@@ -45,9 +45,6 @@ public class LoginController {
         Connection connection;
         PreparedStatement ps;
 
-//        String name = username.getText();
-  //      String passwort = password.getText();
-
         String name = EncryptionHelper.encryptString(username.getText());
         String passwort = EncryptionHelper.encryptString(password.getText());
 
