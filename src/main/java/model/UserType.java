@@ -5,7 +5,7 @@ package model;
  */
 public enum UserType {
     Normal("Normal", 0),
-    Nurse("Krankenschwester", 1),
+    Nurse("Pfleger", 1),
     Doctor("Arzt", 2);
 
     private String displayString;
