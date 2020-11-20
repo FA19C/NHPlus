@@ -16,7 +16,7 @@ public class NurseDAO extends DAOimp<Nurse> {
 
     /**
      * constructs Onbject. Calls the Constructor from <code>DAOImp</code> to store the connection.
-     * @param conn
+     * @param conn Connectio
      */
     public NurseDAO(Connection conn) {
         super(conn);

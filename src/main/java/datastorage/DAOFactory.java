@@ -8,6 +8,10 @@ public class DAOFactory {
 
     }
 
+    /**
+     * gibt die DAOFactory zurrueck
+     * @return gibt die DAOFactory zurrueck
+     */
     public static DAOFactory getDAOFactory() {
         if (instance == null) {
             instance = new DAOFactory();

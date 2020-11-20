@@ -19,11 +19,12 @@ public class Patient extends Person {
 
     /**
      * constructs a patient from the given params.
-     * @param firstName
-     * @param surname
-     * @param dateOfBirth
-     * @param careLevel
-     * @param roomnumber
+     * @param firstName Vorname
+     * @param surname Nachname
+     * @param dateOfBirth Geburtsdatum
+     * @param careLevel Pflegegrad
+     * @param roomnumber Raumnummer
+     * @param locked Ob der Patient gesperrt ist
      */
     public Patient(String firstName, String surname, LocalDate dateOfBirth, String careLevel, String roomnumber, boolean locked) {
         super(firstName, surname);
@@ -35,12 +36,13 @@ public class Patient extends Person {
 
     /**
      * constructs a patient from the given params.
-     * @param pid
-     * @param firstName
-     * @param surname
-     * @param dateOfBirth
-     * @param careLevel
-     * @param roomnumber
+     * @param pid PatientenID
+     * @param firstName Vorname
+     * @param surname Nachname
+     * @param dateOfBirth Geburtsdatum
+     * @param careLevel Pflegegrad
+     * @param roomnumber Raumnummer
+     * @param locked Ob der Patient gesperrt ist
      */
     public Patient(long pid, String firstName, String surname, LocalDate dateOfBirth, String careLevel, String roomnumber, boolean locked) {
         super(firstName, surname);
@@ -102,7 +104,7 @@ public class Patient extends Person {
 
     /**
      *
-     * @param roomnumber
+     * @param roomnumber Raumnummer
      */
     public void setRoomnumber(String roomnumber) {
         this.roomnumber = roomnumber;
@@ -116,7 +118,7 @@ public class Patient extends Person {
 
     /**
      *
-     * @param locked
+     * @param locked locked-Status
      */
     public void setLocked(boolean locked) {this.locked = locked;  }
 

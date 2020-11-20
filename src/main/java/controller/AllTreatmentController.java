@@ -21,6 +21,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Logik die Treatmentview kontrolliert
+ */
 public class AllTreatmentController {
     @FXML
     private TableView<Treatment> tableView;
@@ -63,6 +66,9 @@ public class AllTreatmentController {
 
     private Main main;
 
+    /**
+     * Innitialisert den Controller
+     */
     public void initialize() {
         readAllAndShowInTableView();
         comboBox.setItems(myComboBoxData);
@@ -85,6 +91,9 @@ public class AllTreatmentController {
         createComboBoxDataPfleger();
     }
 
+    /**
+     * liest alle Einträge und zeigt sie an
+     */
     public void readAllAndShowInTableView() {
         this.tableviewContent.clear();
         this.dao = DAOFactory.getDAOFactory().createTreatmentDAO();
@@ -99,6 +108,9 @@ public class AllTreatmentController {
         }
     }
 
+    /**
+     * Fuellt die Combobox für die Patienten
+     */
     private void createComboBoxData(){
         PatientDAO dao = DAOFactory.getDAOFactory().createPatientDAO();
         try {
@@ -116,6 +128,9 @@ public class AllTreatmentController {
         }
     }
 
+    /**
+     * Fuellt die Combobox fuer die Pfleger
+     */
     private void createComboBoxDataPfleger(){
         NurseDAO dao = DAOFactory.getDAOFactory().createNurseDAD();
         try {
@@ -131,6 +146,9 @@ public class AllTreatmentController {
 
 
     @FXML
+    /**
+     * Handle fuer Die Patientencombobox
+     */
     public void handleComboBox(){
         String p = this.comboBox.getSelectionModel().getSelectedItem();
         this.tableviewContent.clear();
@@ -160,6 +178,11 @@ public class AllTreatmentController {
     }
 
 
+    /**
+     * Prueft ob der uebergebene Nachname in der Patientenliste ist und gibt den dazugehörigen Patienten zurrück
+     * @param surname Nachname
+     * @return der Patient zum Nachnamen
+     */
     private Patient searchInList(String surname){
         for (int i =0; i<this.patientList.size();i++){
             if(this.patientList.get(i).getSurname().equals(surname)){
@@ -171,6 +194,9 @@ public class AllTreatmentController {
 
 
     @FXML
+    /**
+     * filtert die Treatments nach dem in der Combobox aktiven Pfleger
+     */
     public void handleComboBoxPfleger(){
         String n = this.comboBoxPfleger.getSelectionModel().getSelectedItem();
         this.tableviewContent.clear();
@@ -189,7 +215,7 @@ public class AllTreatmentController {
         Nurse nurse = searchInListNurse(n);
         if(nurse !=null){
             try {
-                allTreatments = dao.readTreatmentsByNid(nurse.getNid());
+                allTreatments = dao.readTreatmentsByNidLockedSensitiv(nurse.getNid());
                 for (Treatment treatment : allTreatments) {
                     this.tableviewContent.add(treatment);
                 }
@@ -199,6 +225,11 @@ public class AllTreatmentController {
         }
     }
 
+    /**
+     * Prueft ob der übergebene nachname in der Nurselist ist, die aus allen Nurses besteht und gibt sie zurrück
+     * @param surname der Nachname nach dem Gesucht werden soll
+     * @return null wenn keine Nurse gefunden wurde sonst die nurse
+     */
     private Nurse searchInListNurse(String surname){
         for (int i =0; i<this.nurseList.size();i++){
             if(this.nurseList.get(i).getSurname().equals(surname)){
@@ -210,6 +241,9 @@ public class AllTreatmentController {
 
 
     @FXML
+    /**
+     * Handle fuer loeschen eines Eintrages in der Tabelle
+     */
     public void handleDelete(){
         int index = this.tableView.getSelectionModel().getSelectedIndex();
         Treatment t = this.tableviewContent.remove(index);
@@ -222,6 +256,9 @@ public class AllTreatmentController {
     }
 
     @FXML
+    /**
+     * Handle fuer erstellen einer neuen Behandlung
+     */
     public void handleNewTreatment() {
         try{
             String p = this.comboBox.getSelectionModel().getSelectedItem();
@@ -244,6 +281,9 @@ public class AllTreatmentController {
     }
 
     @FXML
+    /**
+     * handlet das anklicken von Eintraegen der Tabelle und oeffnet das Treatmentfenster dazu
+     */
     public void handleMouseClick(){
         int index = this.tableView.getSelectionModel().getSelectedIndex();
 

@@ -43,6 +43,12 @@ public class TreatmentController {
     private Treatment treatment;
     private Nurse nurse;
 
+    /**
+     * Innitialisert den Treatmentcontroller
+     * @param controller der AllTreatmentcontroller woraus das Fenster geoffnet wird
+     * @param stage die Stage worauf das Fenster ausgefuehrt werden soll
+     * @param treatment das anzuzeigende Treatment
+     */
     public void initializeController(AllTreatmentController controller, Stage stage, Treatment treatment) {
         this.stage = stage;
         this.controller= controller;
@@ -60,6 +66,9 @@ public class TreatmentController {
         }
     }
 
+    /**
+     * läd die Daten zum anzeigen rein
+     */
     private void showData(){
         this.lblPatientName.setText(patient.getSurname()+", "+patient.getFirstName());
         this.lblCarelevel.setText(patient.getCareLevel());
@@ -74,6 +83,9 @@ public class TreatmentController {
     }
 
     @FXML
+    /**
+     * Handle fuer Datenaenderung
+     */
     public void handleChange(){
         this.treatment.setDate(this.datepicker.getValue().toString());
         this.treatment.setBegin(txtBegin.getText());
@@ -85,6 +97,9 @@ public class TreatmentController {
         stage.close();
     }
 
+    /**
+     * Methode zum Ausfuehren von Updates vom Treatment was gerade im COntroller ist
+     */
     private void doUpdate(){
         TreatmentDAO dao = DAOFactory.getDAOFactory().createTreatmentDAO();
         try {
@@ -95,6 +110,9 @@ public class TreatmentController {
     }
 
     @FXML
+    /**
+     * Handle zum schließen über Close
+     */
     public void handleCancel(){
         stage.close();
     }

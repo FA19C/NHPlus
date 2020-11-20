@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import utils.EncryptionHelper;
 
 import java.io.IOException;
 import java.sql.*;
@@ -35,13 +36,20 @@ public class LoginController {
         this.stage = stage;
     }
 
+    /**
+     * Handlet das bestätigen der Einloggdaten über den Einloggenknopf
+     * @throws SQLException SQLException bei abrufen ob Einloggdaten stimmen
+     */
     public void einloggenEvent() throws SQLException {
 
         Connection connection;
         PreparedStatement ps;
 
-        String name = username.getText();
-        String passwort = password.getText();
+//        String name = username.getText();
+  //      String passwort = password.getText();
+
+        String name = EncryptionHelper.encryptString(username.getText());
+        String passwort = EncryptionHelper.encryptString(password.getText());
 
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("/MainWindowView.fxml"));
 
@@ -55,26 +63,26 @@ public class LoginController {
 
             if (!result.next()) {
 
-                Stage bühne = new Stage();
+                Stage buene = new Stage();
                 HBox horizonalesBox = new HBox();
                 Scene szene = new Scene(horizonalesBox, 400, 400);
                 Label ergebnis = new Label("Anmeldung Fehlgeschlagen :( \n Password oder Username ist falsch");
 
                 horizonalesBox.getChildren().add(ergebnis);
 
-                bühne.setTitle("Ergebnis");
-                bühne.setScene(szene);
-                bühne.show();
+                buene.setTitle("Ergebnis");
+                buene.setScene(szene);
+                buene.show();
 
             }else {
 
-                Stage bühne = new Stage();
+                Stage buene = new Stage();
                 Scene szene = new Scene(loader.load(), 990, 850);
                 MainWindowController controller = loader.getController();
-                bühne.setScene(szene);
-                bühne.show();
+                buene.setScene(szene);
+                buene.show();
                 stage.close();
-                controller.initializeMainWindowController(bühne);
+                controller.initializeMainWindowController(buene);
 
 
 

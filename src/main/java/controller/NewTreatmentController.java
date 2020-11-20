@@ -35,9 +35,16 @@ public class NewTreatmentController {
 
     private AllTreatmentController controller;
     private Patient patient;
-     private Stage stage;
+    private Stage stage;
     private Nurse nurse;
 
+    /**
+     * Initialisiert den NewTreatmentcontroller
+     * @param controller der Treatmentcontroller woraus das NewTreatmentfenster geoeffnet wurde
+     * @param stage die Buene worauf das Fenster ausgefuehrt werden soll
+     * @param patient der Patient des Treatments
+     * @param nurse der Pfleger
+     */
     public void initialize(AllTreatmentController controller, Stage stage, Patient patient, Nurse nurse) {
         this.controller= controller;
         this.patient = patient;
@@ -58,6 +65,9 @@ public class NewTreatmentController {
     }
 
     @FXML
+    /**
+     * Handle fuer hinzufuegen
+     */
     public void handleAdd(){
         LocalDate date = this.datepicker.getValue();
         LocalTime begin = DateConverter.convertStringToLocalTime(txtBegin.getText());
@@ -72,6 +82,10 @@ public class NewTreatmentController {
         stage.close();
     }
 
+    /**
+     * Erstellt das Treatment auf der Datenbak
+     * @param treatment die Rohdaten
+     */
     private void createTreatment(Treatment treatment) {
         TreatmentDAO dao = DAOFactory.getDAOFactory().createTreatmentDAO();
         try {
@@ -82,9 +96,11 @@ public class NewTreatmentController {
     }
 
     @FXML
+    /**
+     * Handle fuer Abbrechen
+     */
     public void handleCancel(){
         stage.close();
     }
-
 
 }

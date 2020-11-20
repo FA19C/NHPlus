@@ -7,11 +7,14 @@ import java.sql.SQLException;
 public class ConnectionBuilder {
     private static Connection conn;
 
+    /**
+     * Constructor zum Erstellen der Connection
+     */
     private ConnectionBuilder() {
         try {
             Class.forName("org.hsqldb.jdbc.JDBCDriver");
             System.out.println("Working Directory = " + System.getProperty("user.dir"));
-
+            
             conn = DriverManager.getConnection("jdbc:hsqldb:db/nursingHomeDB;user=SA;password=SA");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -29,6 +32,9 @@ public class ConnectionBuilder {
         return conn;
     }
 
+    /**
+     * Schließt die Connection
+     */
     public static void closeConnection() {
         try {
             conn.close();
