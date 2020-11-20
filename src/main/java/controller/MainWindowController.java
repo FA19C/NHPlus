@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -15,12 +16,15 @@ public class MainWindowController {
     private BorderPane mainBorderPane;
 
 
+    @FXML
+    private Button sperren;
+
+
     private Stage stage;
 
-    public void initializeMainWindowController(Stage stage){
+    public void initializeMainWindowController(Stage stage) {
         this.stage = stage;
     }
-
 
 
     @FXML

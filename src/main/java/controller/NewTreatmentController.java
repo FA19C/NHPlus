@@ -4,10 +4,7 @@ import datastorage.DAOFactory;
 import datastorage.TreatmentDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Nurse;
 import model.Patient;
@@ -38,18 +35,24 @@ public class NewTreatmentController {
 
     private AllTreatmentController controller;
     private Patient patient;
-    private Stage stage;
+     private Stage stage;
     private Nurse nurse;
-
 
     public void initialize(AllTreatmentController controller, Stage stage, Patient patient, Nurse nurse) {
         this.controller= controller;
         this.patient = patient;
         this.nurse = nurse;
         this.stage = stage;
+        showPatientData();
         showNurseData();
 
     }
+
+    private void showPatientData(){
+        this.lblFirstname.setText(patient.getFirstName());
+        this.lblSurname.setText(patient.getSurname());
+    }
+
     private void showNurseData(){
         this.lblNurseID.setText(String.valueOf(this.nurse.getNid()));
     }
@@ -82,5 +85,6 @@ public class NewTreatmentController {
     public void handleCancel(){
         stage.close();
     }
+
 
 }
