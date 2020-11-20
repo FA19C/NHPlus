@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import lib.EncryptionService;
 import model.User;
 
 import java.io.IOException;
@@ -56,7 +57,7 @@ public class dlgLoginController {
 
             try {
                 User user = uDao.getUserByName(tbUserName.getText());
-                if(user != null && user.getLoginPasswort().equals(tbPassword.getText())){
+                if(user != null && user.getLoginPasswort().equals(EncryptionService.encrypt(tbPassword.getText()))){
 
                     User.LogginUser = user;
 

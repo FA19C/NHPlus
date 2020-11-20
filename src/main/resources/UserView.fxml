@@ -93,7 +93,7 @@
          <GridPane.margin>
             <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
          </GridPane.margin></ChoiceBox>
-      <Label alignment="TOP_LEFT" text="Passwort LOL" GridPane.rowIndex="1">
+      <Label alignment="TOP_LEFT" text="Neues Passwort" GridPane.rowIndex="1">
          <font>
             <Font name="Arial" size="14.0" />
          </font>

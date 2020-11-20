@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
+import lib.EncryptionService;
 import model.UserType;
 import model.User;
 import java.sql.SQLException;
@@ -60,7 +61,6 @@ public class UserController {
         tbUserName.setText(user.getLogginName());
         tbFirstName.setText(user.getFirstName());
         tbLastName.setText(user.getSurname());
-        tbPasswordField.setText(user.getLoginPasswort());
         cbUserType.setValue(user.getUserType());
         tbTel.setText(user.getTelephoneNumber());
     }
@@ -72,7 +72,10 @@ public class UserController {
                 // tbUserName.getText());
                 user.setFirstName(tbFirstName.getText());
                 user.setSurname(tbLastName.getText());
-                user.setLoginPasswort(tbPasswordField.getText());
+                String newPass = tbPasswordField.getText();
+                if(newPass != null){
+                    user.setLoginPasswort(EncryptionService.encrypt(newPass));
+                }
                 user.setUserType(cbUserType.getValue());
                 user.setTelephoneNumber(tbTel.getText());
 
