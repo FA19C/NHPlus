@@ -18,9 +18,6 @@ import java.sql.*;
 public class LoginController {
 
     @FXML
-    public BorderPane borderPane;
-
-    @FXML
     public TextField username;
 
 
@@ -92,6 +89,13 @@ public class LoginController {
 
     }
 
+    /**
+     * Handles closing the window if the user doesn't want to log in
+     */
+    @FXML
+    public void handleCancel() {
+        stage.close();
+    }
 
 
 }

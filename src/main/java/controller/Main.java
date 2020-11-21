@@ -6,16 +6,13 @@ import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import utils.EncryptionHelper;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Optional;
 
 public class Main extends Application {
 
@@ -31,10 +28,12 @@ public class Main extends Application {
         mainWindow();
     }
 
+
+
     public void mainWindow() {
         try {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("/Login.fxml"));
-            BorderPane pane = loader.load();
+            AnchorPane pane = loader.load();
             LoginController loginController = loader.getController();
             loginController.initialize(primaryStage);
 
