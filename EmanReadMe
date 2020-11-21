@@ -1,0 +1,4 @@
+Meine Tasks waren:
+1- einen Pfleger Brereich zu erstellen und das ging problemlos.
+2- eine Loginseite zu erstellen. Das einzige was ich hier nicht hinbekommen konnte, war dass beim Sperren wird das NewTreatmentView-Fenster
+nicht gepserrt, falls das mit Hauptfenster geöffnt ist.
