@@ -166,6 +166,33 @@ public class TreatmentDAO extends DAOimp<Treatment> {
     }
 
     /**
+     * Liest alle Treatments von einem Pfleger und Patienten und beachtet ob deser gesperrt ist
+     * @param nid der Pfleger
+     * @param pid der Patient
+     * @return alle Treatments von einem Pfleger und Patienten und beachtet ob ideser gesperrt ist
+     * @throws SQLException SQLException bei lesen der Treatments nach NurseID und PID
+     */
+    public List<Treatment> readTreatMentsByNidAndPidLockedSensitive(long nid, long pid) throws SQLException {
+        ArrayList<Treatment> list = new ArrayList<Treatment>();
+        Treatment object = null;
+        Statement st = conn.createStatement();
+        ResultSet result = st.executeQuery(getReadAllTreatmentsOfByNidAndPidLockedSensitiv(nid, pid));
+        list = getListFromResultSet(result);
+        return list;
+    }
+
+    /**
+     * Erstellt SQL-String der alle Treatments nach Pfleger und Patient ausließt und beachtet ob der dazugehörige Patient gesperrt ist
+     * @param nid Pflegerid
+     * @param pid Patientenid
+     * @return SQL-String der alle Treatments nach Pfleger und Patient ausließt und beachtet ob der dazugehörige Patient gesperrt ist
+     */
+    private String getReadAllTreatmentsOfByNidAndPidLockedSensitiv(long nid, long pid)
+    {
+        return String.format("SELECT * FROM treatment a, patient b WHERE a.nid = %d and a.pid = b.pid and a.pid = %s and (b.locked = FALSE or b.locked IS NULL)", nid, pid);
+    }
+
+    /**
      * Erstellt SQL-String der alle Treatments nach Pfleger ausließt und beachtet ob der dazugehörige Patient gesperrt ist
      * @param nid Pflegerid
      * @return SQL-String der alle Treatments nach Pfleger ausließt und beachtet ob der dazugehörige Patient gesperrt ist

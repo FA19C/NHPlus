@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * Implementiert die Grundsätze die jede DAO braucht um hiervon zu erben
- * @param <T>
+ * @param <T> Generic fuer zukuenftigen Typ der DAO
  */
 public abstract class DAOimp<T> implements DAO<T>{
     protected Connection conn;

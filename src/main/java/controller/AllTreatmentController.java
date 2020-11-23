@@ -70,7 +70,7 @@ public class AllTreatmentController {
      * Innitialisert den Controller
      */
     public void initialize() {
-        readAllAndShowInTableView();
+
         comboBox.setItems(myComboBoxData);
         comboBox.getSelectionModel().select(0);
 
@@ -89,6 +89,7 @@ public class AllTreatmentController {
         this.tableView.setItems(this.tableviewContent);
         createComboBoxData();
         createComboBoxDataPfleger();
+        readAllAndShowInTableView();
     }
 
     /**
@@ -96,16 +97,7 @@ public class AllTreatmentController {
      */
     public void readAllAndShowInTableView() {
         this.tableviewContent.clear();
-        this.dao = DAOFactory.getDAOFactory().createTreatmentDAO();
-        List<Treatment> allTreatments;
-        try {
-            allTreatments = dao.readAllLockedSensitiv();
-            for (Treatment treatment : allTreatments) {
-                this.tableviewContent.add(treatment);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        readTreatments();
     }
 
     /**
@@ -123,6 +115,7 @@ public class AllTreatmentController {
                 }
 
             }
+            comboBox.getSelectionModel().selectFirst();
         }catch(SQLException e){
             e.printStackTrace();
         }
@@ -139,6 +132,7 @@ public class AllTreatmentController {
             for (Nurse nurse: nurseList) {
                 this.myComboBoxDataPfleger.add(nurse.getSurname());
             }
+            comboBoxPfleger.getSelectionModel().selectFirst();
         }catch(SQLException e){
             e.printStackTrace();
         }
@@ -150,31 +144,7 @@ public class AllTreatmentController {
      * Handle fuer Die Patientencombobox
      */
     public void handleComboBox(){
-        String p = this.comboBox.getSelectionModel().getSelectedItem();
-        this.tableviewContent.clear();
-        this.dao = DAOFactory.getDAOFactory().createTreatmentDAO();
-        List<Treatment> allTreatments;
-        if(p.equals("alle")){
-            try {
-                allTreatments= this.dao.readAllLockedSensitiv();
-                for (Treatment treatment : allTreatments) {
-                    this.tableviewContent.add(treatment);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        Patient patient = searchInList(p);
-        if(patient !=null){
-            try {
-                allTreatments = dao.readTreatmentsByPidLockedSensitiv(patient.getPid());
-                for (Treatment treatment : allTreatments) {
-                    this.tableviewContent.add(treatment);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        readTreatments();
     }
 
 
@@ -198,32 +168,81 @@ public class AllTreatmentController {
      * filtert die Treatments nach dem in der Combobox aktiven Pfleger
      */
     public void handleComboBoxPfleger(){
+        readTreatments();
+    }
+
+    /**
+     * ließt alle Treatments aus und beachtet pfleger und Patientencombobox
+     */
+    private void readTreatments()
+    {
         String n = this.comboBoxPfleger.getSelectionModel().getSelectedItem();
+        String p = this.comboBox.getSelectionModel().getSelectedItem();
         this.tableviewContent.clear();
         this.dao = DAOFactory.getDAOFactory().createTreatmentDAO();
         List<Treatment> allTreatments;
-        if(n.equals("alle")){
-            try {
-                allTreatments= this.dao.readAllLockedSensitiv();
-                for (Treatment treatment : allTreatments) {
-                    this.tableviewContent.add(treatment);
+
+        if(n.equals("alle"))
+        {
+            if(p.equals("alle"))
+            {
+                try {
+                    allTreatments= this.dao.readAllLockedSensitiv();
+                    for (Treatment treatment : allTreatments) {
+                        this.tableviewContent.add(treatment);
+                    }
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
+                catch (SQLException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+            else
+            {
+                Patient patient = searchInList(p);
+                if(patient !=null){
+                    try {
+                        allTreatments = dao.readTreatmentsByPidLockedSensitiv(patient.getPid());
+                        for (Treatment treatment : allTreatments) {
+                            this.tableviewContent.add(treatment);
+                        }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
-        Nurse nurse = searchInListNurse(n);
-        if(nurse !=null){
-            try {
-                allTreatments = dao.readTreatmentsByNidLockedSensitiv(nurse.getNid());
-                for (Treatment treatment : allTreatments) {
-                    this.tableviewContent.add(treatment);
+        else if(p.equals("alle"))
+        {
+            Nurse nurse = searchInListNurse(n);
+            if(nurse !=null){
+                try {
+                    allTreatments = dao.readTreatmentsByNidLockedSensitiv(nurse.getNid());
+                    for (Treatment treatment : allTreatments) {
+                        this.tableviewContent.add(treatment);
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
+            }
+        }
+        else
+        {
+            Nurse nurse = searchInListNurse(n);
+            Patient patient = searchInList(p);
+            if(nurse !=null){
+                try {
+                    allTreatments = dao.readTreatMentsByNidAndPidLockedSensitive(nurse.getNid(), patient.getPid());
+                    for (Treatment treatment : allTreatments) {
+                        this.tableviewContent.add(treatment);
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
+
 
     /**
      * Prueft ob der übergebene nachname in der Nurselist ist, die aus allen Nurses besteht und gibt sie zurrück
@@ -297,8 +316,9 @@ public class AllTreatmentController {
     /**
      * Handle fuers Zeigen von neuTreatmentView Fenster
      * Wir bei Hinzfuegen einer neuen Behandlung gezeigt
+     * @param nurse Pfleger der das neue Treatment bekommt
+     * @param patient Patient der das neue Treatent bekommt
      */
-
     public void newTreatmentWindow(Patient patient, Nurse nurse){
         try {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("/NewTreatmentView.fxml"));
@@ -329,6 +349,7 @@ public class AllTreatmentController {
     /**
      * Handle fuers Zeigen von der schon erstellten Behandlung
      * Beim Doppel Klick auf einer Behandlung wird dieses Fenster(TreatmentView) gezeigt.
+     * @param treatment Treatment welches Angezeigt werden soll
      */
 
     public void treatmentWindow(Treatment treatment){
