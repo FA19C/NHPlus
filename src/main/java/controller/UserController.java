@@ -73,7 +73,7 @@ public class UserController {
                 user.setFirstName(tbFirstName.getText());
                 user.setSurname(tbLastName.getText());
                 String newPass = tbPasswordField.getText();
-                if(newPass != null){
+                if(newPass != null && !newPass.equals("")){
                     user.setLoginPasswort(EncryptionService.encrypt(newPass));
                 }
                 user.setUserType(cbUserType.getValue());
