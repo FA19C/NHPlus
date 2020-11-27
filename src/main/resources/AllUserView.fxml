@@ -28,22 +28,6 @@
    <bottom>
       <FlowPane prefHeight="26.0" prefWidth="558.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="btCreate" mnemonicParsing="false" onAction="#btCreate_Action" text="Anlegen">
-               <font>
-                  <Font name="Arial" size="14.0" />
-               </font>
-               <FlowPane.margin>
-                  <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
-               </FlowPane.margin>
-            </Button>
-            <Button fx:id="btDelete" mnemonicParsing="false" onAction="#btDelete_Action" text="Löschen">
-               <font>
-                  <Font name="Arial" size="14.0" />
-               </font>
-               <FlowPane.margin>
-                  <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
-               </FlowPane.margin>
-            </Button>
             <Label fx:id="lUserType" text="Benutzer Typ">
                <font>
                   <Font name="Arial" size="14.0" />
