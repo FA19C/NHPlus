@@ -50,3 +50,33 @@ Wird das Open JDK verwendet, werden JavaFX-Abhängigkeiten nicht importiert. Die
 - Benutzername: SA
 - Passwort: SA
 - Bitte nicht in die Datenbank schauen, während die Applikation läuft. Das sorgt leider für einen Lock, der erst wieder verschwindet, wenn IntelliJ neugestartet wird!
+
+
+# Neue Änderungen
+
+## Login
+- Beim Start kann der Benutzer sich mit einem Benutzernamen und Passwort einloggen.
+- User's: name, name2, name3
+- Passwörter für die Users: 123
+
+## Speeren
+Über sperren kann der Benutzer die Anwendung speeren. Hierbei muss man sich wieder neu einloggen.
+
+## Benutzer
+In der Benutzerübersicht dann der aktuell eingeloggt Benutzer seine Daten ändern. 
+Hierbei müssen die neuen Daten angegeben werden und dann mit Speichen übernommen werden. Hier kann der Benutzer auch ein neues Passwort angeben, das diesem aber nicht angezeigt wird. Dies wird auch nur gemacht, wen ein Passwort angegeben wurde.
+
+## Alle Benutzer
+Hier kann man sich alle Benutzer anzeigen lassen. 
+Die Anzeige kann über die Combobox gefiltert erden. Dadurch ist es möglich, sich z.B. nur alle Pfleger anzeigen zu lassen. Hierfür wählt man einen Typen aus und lädt dann die Tabelle über den Button "Neu Laden" neu.
+
+## Patienten/innen
+Hier kann man sich alle Patenten angucken und neue Patenten anlegen. 
+Dazu kann man ausgewählt Patenten aus der Tabelle über den Button "Als PDF Expor..." die Daten des Patenten als PDF Exportieren. Hier wurde auch der Vermögensstand aus der Tabelle entfernt.
+
+## Verschlüsselung
+Die Verschlüsselung der Daten konnte nicht wie geplant umgesetzt werden. 
+Da wir beim Verschlüsseln aller Spalten die Datentypen von allen Spalten auf String ändern müssten. Daher haben wir uns entschieden, nur das Passwort zu verschlüsseln, damit man sich mit den Daten aus der Datenbanktabelle nicht einloggen kann. Wir haben, um uns das Entwickeln einfach zu machen, die Daten mit Base64 "Verschlüsselt".
+
+## Locken/Sperren bzw. Löschen von Patieten Daten
+Wenn man jetzt einen Patient löschen oder es explezit macht werden die Daten erst gesperrt und nicht direkt gelöscht.
